@@ -1,0 +1,308 @@
+{
+  "handoffVersion": 1,
+  "confirmedAt": "2026-10-30T05:09:01.175Z",
+  "problemText": "张平有500元钱，打算存入银行两年可以有两种储蓄办法，一种是存两年期的，年利率是2.43%；一种是先存一年期的，年利率是2.25%，第一年到期时再把本金和税后利息取出来合在一起，再存入一年。选择哪种办法得到的税后利息多一些？",
+  "problemType": null,
+  "boardFocus": null,
+  "relatedKnowledge": [
+    {
+      "知识点": "存款利息计算",
+      "考点": "利息 = 本金 × 年利率 × 存期",
+      "策略方法": "分别计算两种储蓄方案的最终本息或利息，通过对比大小来选择最优方案",
+      "总结归纳": "多方案比较类应用题，需逐一列出各方案结果进行量化对比"
+    },
+    {
+      "知识点": "利息税计算",
+      "考点": "税后利息 = 利息 × (1 - 税率)，或根据当时政策计算扣除利息税后的实际收益",
+      "策略方法": "先求出总利息，再扣除相应的利息税得到税后收益",
+      "总结归纳": "注意题目中是否要求计算税后利息，严格按照步骤分步求解"
+    },
+    {
+      "知识点": "复利（滚动存款）思想",
+      "考点": "第二年存款时，本金变更为“第一年本金 + 第一年税后利息”",
+      "策略方法": "分段计算：先算第一年本息和，将其作为第二年的新本金再计算第二年利息",
+      "总结归纳": "分段定期存款要把前一年的本利和合起来作为新本金滚动计算"
+    }
+  ],
+  "knowledgeAnalysis": {
+    "teachingFocus": "掌握定期存款利息、利息税以及一年期滚动存款（复利）的分段计算方法与方案优选策略。",
+    "keyFormulaList": [
+      "利息 = 本金 × 年利率 × 存期",
+      "第二年本金 = 第一年本金 + 第一年税后利息"
+    ],
+    "formulaHints": [
+      "利息公式：利息 = 本金 × 年利率 × 存期，计算存款产生的利息时使用",
+      "滚动存款本金更新：第二年本金 = 第一年本金 + 第一年税后利息，在计算先存一年再转存的第二年利息时使用"
+    ],
+    "commonMistakes": [
+      "计算第二年滚动存款时，忘记把第一年的税后利息加到第二年的本金中",
+      "混淆一年期与两年期利率，或者忽略利息税的扣除"
+    ]
+  },
+  "suggestedGrade": "",
+  "uncertainItems": [],
+  "suggestedLayout": null,
+  "imageKind": "text_only",
+  "keepOriginal": false,
+  "coordinateSpec": {
+    "coordinateSystem": "百分比坐标（0—100），原点左上",
+    "format": {
+      "region": "区域：[左%, 上%, 宽%, 高%]，所有百分比最多保留 2 位小数",
+      "point": "起点/终点：[x%, y%]"
+    },
+    "example": "若分析区动作锚点为 [6, 40.62]，则动作参考点为 [6, 40.62]（40.62 = 默认分析区 y，见 boardLayout.js DEFAULT_BOARD_PLAN 派生）"
+  },
+  "zoneAnchors": {
+    "question": {
+      "label": {
+        "x": 5.7,
+        "y": 6.6,
+        "w": 7.1
+      },
+      "labelStartCoord": {
+        "x": 5.7,
+        "y": 6.6
+      },
+      "regionStartCoord": {
+        "x": 6,
+        "y": 13.2,
+        "w": 40.4,
+        "h": null
+      }
+    },
+    "analysis": {
+      "label": {
+        "x": 5.7,
+        "y": 37.25,
+        "w": 7.2
+      },
+      "labelStartCoord": {
+        "x": 5.7,
+        "y": 37.25
+      },
+      "regionStartCoord": {
+        "x": 6,
+        "y": 43.37,
+        "w": 44,
+        "h": 51.63
+      }
+    },
+    "solution": {
+      "label": {
+        "x": 53.7,
+        "y": 6.6,
+        "w": 7.4
+      },
+      "labelStartCoord": {
+        "x": 53.7,
+        "y": 6.6
+      },
+      "regionStartCoord": {
+        "x": 54,
+        "y": 14,
+        "w": 40,
+        "h": 44
+      }
+    },
+    "summary": {
+      "label": {
+        "x": 53.7,
+        "y": 62,
+        "w": 7.2
+      },
+      "labelStartCoord": {
+        "x": 53.7,
+        "y": 62
+      },
+      "regionStartCoord": {
+        "x": 54,
+        "y": 69.5,
+        "w": 40,
+        "h": 22
+      }
+    }
+  },
+  "topicLayout": {
+    "topicLabel": {
+      "x": 5.7,
+      "y": 6.6,
+      "w": 7.1
+    },
+    "question": {
+      "x": 6,
+      "y": 13.2,
+      "w": 40.4,
+      "fontSize": 30
+    },
+    "image": null,
+    "keepOriginal": false,
+    "blocks": null
+  },
+  "boardPlan": {
+    "canvas": {
+      "w": 1726,
+      "h": 980
+    },
+    "layoutMode": "portrait",
+    "topicBottomPct": 35.25,
+    "topicLabel": {
+      "x": 5.7,
+      "y": 6.6,
+      "w": 7.1
+    },
+    "question": {
+      "x": 6,
+      "y": 13.2,
+      "w": 40.4,
+      "fontSize": 30
+    },
+    "image": null,
+    "analysisLabel": {
+      "x": 5.7,
+      "y": 37.25,
+      "w": 7.2
+    },
+    "analysis": {
+      "x": 6,
+      "y": 43.37,
+      "w": 44,
+      "h": 51.63
+    },
+    "solutionLabel": {
+      "x": 53.7,
+      "y": 6.6,
+      "w": 7.4
+    },
+    "solution": {
+      "x": 54,
+      "y": 14,
+      "w": 40,
+      "h": 44
+    },
+    "summaryLabel": {
+      "x": 53.7,
+      "y": 62,
+      "w": 7.2
+    },
+    "summary": {
+      "x": 54,
+      "y": 69.5,
+      "w": 40,
+      "h": 22
+    },
+    "plannedAt": "2026-10-30T05:08:50.224Z",
+    "method": "topic-aware-layout-rule",
+    "overflow": false
+  },
+  "canvasParams": {
+    "canvasSize": {
+      "width": 1726,
+      "height": 980,
+      "unit": "px",
+      "origin": "左上角(0,0), X向右Y向下"
+    },
+    "coordinateSystem": "百分比坐标 0-100",
+    "fontSource": {
+      "handwriting": {
+        "family": "LikeJianJianTi",
+        "choice": "lijian",
+        "fontStack": "\"LikeJianJianTi\", \"平方乔木体\", \"平方韶华体\", \"平方上上谦体\", \"平方三生体\", \"PingFangSaTuoTi\", KaiTi, STKaiti, \"PingFang SC\", serif",
+        "label": "手写体（分析/解答/总结板书，主字体=LikeJianJianTi CDN 490）",
+        "fontWeight": "normal",
+        "cssHref": "/fonts/board-local.css",
+        "cssHrefFallbacks": [
+          "/fonts/board-local.css",
+          "https://fontsapi.zeoseven.com/507/main/result.css",
+          "https://fontsapi.zeoseven.com/511/main/result.css",
+          "https://fontsapi.zeoseven.com/510/main/result.css",
+          "https://fontsapi.zeoseven.com/509/main/result.css"
+        ],
+        "loadSnippet": "<link href=\"/fonts/board-local.css\" onload=\"this.rel='stylesheet'\" rel=\"preload\" as=\"style\" crossorigin />",
+        "loadSnippetFallbacks": "<link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/507/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/511/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/510/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/509/main/result.css\" media=\"print\" onload=\"this.media='all'\" />",
+        "fallbackSnippet": "<noscript><link rel=\"stylesheet\" href=\"/fonts/board-local.css\" /></noscript>",
+        "usage": "渲染前必须先加载该 CSS（font-family: \"LikeJianJianTi\"; font-weight: normal），字体栈 fallback 顺序见 fontStack；490 不可用时按栈降级"
+      },
+      "question": {
+        "family": "微软雅黑（印刷体，本地字体）",
+        "stack": "\"Microsoft YaHei\"",
+        "label": "印刷体（题目层，微软雅黑本地字体，不加载网络字体）",
+        "fontWeight": "normal"
+      }
+    },
+    "fontSize": {
+      "question": {
+        "px": 30,
+        "family": "微软雅黑（印刷体，30px）",
+        "color": "黑色"
+      },
+      "analysis": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "红色"
+      },
+      "solution": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "黑色"
+      },
+      "summary": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "黑色"
+      }
+    },
+    "lineHeight": {
+      "policy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px",
+      "question": "自然+2px 分数余量（无强制行高规范）",
+      "others": "自然+4px（2px分数余量+2px行距呼吸，无强制行高规范）",
+      "estimateRatio": 1.2,
+      "extraPx": 2,
+      "boardExtraPx": 4
+    },
+    "letterSpacing": {
+      "question": "0",
+      "others": "下游渲染参数：字距均匀无随机（2026-10-17 书写抖动全拔，B 不需要处理）"
+    },
+    "style": "老师上课草算演示，微微达芬奇手稿style（草稿推演质感，轻盈生动；板书绝不可溢出画布）",
+    "boardSpeed": "下游渲染参数：1秒约4.5个汉字，每行±14.000000000000002%轻微抖动；书写时长超出音频窗口时自适应加速压进音频内（音频=行时长唯一主时钟）",
+    "boardSpeedCharsPerSec": 4.5,
+    "boardSpeedJitter": 0.14,
+    "boardSpeedAdaptiveCompress": true,
+    "actionSpeed": "rough-notation underline/circle",
+    "lineHeightPolicy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px"
+  },
+  "showGrid": true,
+  "agentPageName": "第1步 · 贴题识别",
+  "agentCapability": "multimodal",
+  "screenshotUrl": "/pic/shot-20261030-130851-740.jpg",
+  "knowledgeBasePath": "doc/knowledge-a.compact.json",
+  "essence": "解答绝对主体，标准结构",
+  "stageRatioSuggestion": {
+    "type": "b",
+    "cuCode": "CU-03",
+    "category": "方法确定",
+    "topicExamples": "长方形&正方形(面积/周长)、平行四边形/梯形(面积)、植树、鸡兔同笼(假设)、归一、税率、利润利率、比和比例",
+    "suggestedRatio": {
+      "analysis": "5-15%",
+      "solution": "55-65%",
+      "summary": "5-10%",
+      "introAndClosing": "23%"
+    },
+    "essence": "解答绝对主体，标准结构",
+    "confidence": "medium"
+  },
+  "环节配比占比": {
+    "type": "b",
+    "cuCode": "CU-03",
+    "category": "方法确定",
+    "topicExamples": "长方形&正方形(面积/周长)、平行四边形/梯形(面积)、植树、鸡兔同笼(假设)、归一、税率、利润利率、比和比例",
+    "suggestedRatio": {
+      "analysis": "5-15%",
+      "solution": "55-65%",
+      "summary": "5-10%",
+      "introAndClosing": "23%"
+    },
+    "essence": "解答绝对主体，标准结构",
+    "confidence": "medium"
+  }
+}

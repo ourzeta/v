@@ -1,0 +1,1036 @@
+{
+  "projectCode": "20261030-125431-690",
+  "filename": "deliverable-20261030-125431-690.json",
+  "htmlFilename": "deliverable-20261030-125431-690.html",
+  "createdAt": "2026-10-30T04:54:31.732Z",
+  "deliverable": {
+    "apiSpecVersion": "2.0.0",
+    "specificationSummary": "Each row contains speech, board, and underline/circle actions; timing is computed by the program.",
+    "specAnnotation": "画布规格批注：尺寸 1726x980、比例、题目/板书字号、stage 四区坐标落座区间、越界与手稿风格。",
+    "projectCode": "20261030-125431-690",
+    "problemText": "前轮在720米的距离里比后轮多转40周，如果后轮的周长是2米，求前轮的周长。",
+    "sourceImageUrl": "",
+    "keepOriginal": false,
+    "screenshotUrl": "../pic/shot-20261030-125202-153.jpg",
+    "topicLayout": {
+      "topicLabel": {
+        "x": 5.7,
+        "y": 6.6,
+        "w": 7.1
+      },
+      "question": {
+        "x": 6,
+        "y": 13.32,
+        "w": 40.32,
+        "fontSize": 30
+      },
+      "image": null,
+      "keepOriginal": false,
+      "blocks": null
+    },
+    "canvasParams": {
+      "source": "handoff (Agent A 根据题目实时判断，为唯一真相源)",
+      "canvasSize": {
+        "width": 1726,
+        "height": 980,
+        "unit": "px",
+        "origin": "左上角(0,0), X向右Y向下"
+      },
+      "coordinateSystem": "百分比坐标 0-100",
+      "fontSource": {
+        "handwriting": {
+          "family": "LikeJianJianTi",
+          "choice": "lijian",
+          "fontStack": "\"LikeJianJianTi\", \"平方乔木体\", \"平方韶华体\", \"平方上上谦体\", \"平方三生体\", \"PingFangSaTuoTi\", KaiTi, STKaiti, \"PingFang SC\", serif",
+          "label": "手写体（分析/解答/总结板书，主字体=LikeJianJianTi CDN 490）",
+          "fontWeight": "normal",
+          "cssHref": "/fonts/board-local.css",
+          "cssHrefFallbacks": [
+            "/fonts/board-local.css",
+            "https://fontsapi.zeoseven.com/507/main/result.css",
+            "https://fontsapi.zeoseven.com/511/main/result.css",
+            "https://fontsapi.zeoseven.com/510/main/result.css",
+            "https://fontsapi.zeoseven.com/509/main/result.css"
+          ],
+          "loadSnippet": "<link href=\"/fonts/board-local.css\" onload=\"this.rel='stylesheet'\" rel=\"preload\" as=\"style\" crossorigin />",
+          "loadSnippetFallbacks": "<link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/507/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/511/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/510/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/509/main/result.css\" media=\"print\" onload=\"this.media='all'\" />",
+          "fallbackSnippet": "<noscript><link rel=\"stylesheet\" href=\"/fonts/board-local.css\" /></noscript>",
+          "usage": "渲染前必须先加载该 CSS（font-family: \"LikeJianJianTi\"; font-weight: normal），字体栈 fallback 顺序见 fontStack；490 不可用时按栈降级"
+        },
+        "question": {
+          "family": "微软雅黑（印刷体，本地字体）",
+          "stack": "\"Microsoft YaHei\"",
+          "label": "印刷体（题目层，微软雅黑本地字体，不加载网络字体）",
+          "fontWeight": "normal"
+        }
+      },
+      "fontSize": {
+        "question": {
+          "px": 30,
+          "family": "微软雅黑（印刷体，30px）",
+          "color": "黑色"
+        },
+        "analysis": {
+          "px": 40,
+          "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+          "color": "红色"
+        },
+        "solution": {
+          "px": 40,
+          "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+          "color": "黑色"
+        },
+        "summary": {
+          "px": 40,
+          "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+          "color": "黑色"
+        }
+      },
+      "lineHeight": {
+        "policy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px",
+        "question": "自然+2px 分数余量（无强制行高规范）",
+        "others": "自然+4px（2px分数余量+2px行距呼吸，无强制行高规范）",
+        "estimateRatio": 1.2,
+        "extraPx": 2,
+        "boardExtraPx": 4
+      },
+      "letterSpacing": {
+        "question": "0",
+        "others": "下游渲染参数：字距均匀无随机（2026-10-17 书写抖动全拔，B 不需要处理）"
+      },
+      "style": "老师上课草算演示，微微达芬奇手稿style（草稿推演质感，轻盈生动；板书绝不可溢出画布）",
+      "boardSpeed": "下游渲染参数：1秒约4.5个汉字，每行±14.000000000000002%轻微抖动；书写时长超出音频窗口时自适应加速压进音频内（音频=行时长唯一主时钟）",
+      "boardSpeedCharsPerSec": 4.5,
+      "boardSpeedJitter": 0.14,
+      "boardSpeedAdaptiveCompress": true,
+      "actionSpeed": "rough-notation underline/circle",
+      "lineHeightPolicy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px"
+    },
+    "boardPlan": {
+      "canvas": {
+        "w": 1726,
+        "h": 980
+      },
+      "layoutMode": "portrait",
+      "topicLabel": {
+        "x": 5.7,
+        "y": 6.6,
+        "w": 7.1
+      },
+      "question": {
+        "x": 6,
+        "y": 13.32,
+        "w": 40.32,
+        "h": ""
+      },
+      "analysisLabel": {
+        "x": 5.7,
+        "y": 34.5,
+        "w": 7.2
+      },
+      "analysis": {
+        "x": 6,
+        "y": 40.62,
+        "w": 44,
+        "h": 54.38
+      },
+      "solutionLabel": {
+        "x": 53.7,
+        "y": 6.6,
+        "w": 7.4
+      },
+      "solution": {
+        "x": 54,
+        "y": 14,
+        "w": 40,
+        "h": 44
+      },
+      "summaryLabel": {
+        "x": 53.7,
+        "y": 62,
+        "w": 7.2
+      },
+      "summary": {
+        "x": 54,
+        "y": 69.5,
+        "w": 40,
+        "h": 22
+      },
+      "image": null
+    },
+    "uiSettings": {
+      "coordinateMode": "百分比",
+      "questionFontFamily": "\"Microsoft YaHei\"",
+      "lineHeightPolicy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px",
+      "audioSpeedPolicy": "（有音频 url 的，以音频自然播放时间为准，一组一组自然播放；无音频 url 的，用兜底演示数据占位，按 160 字/分估算凑数演示）",
+      "questionFontSize": "30px",
+      "rowGapMs": 1000,
+      "voiceReferenceId": "9d88188c6ddf4441a396af0e02aa2434",
+      "handwritingFontChoice": "lijian",
+      "handwritingFont": "LikeJianJianTi"
+    },
+    "problemInfo": {
+      "screenshotUrl": "../pic/shot-20261030-125202-153.jpg",
+      "problemType": "word",
+      "relatedKnowledge": [
+        {
+          "编号": "kp_147",
+          "学段": "5-6年级",
+          "系列": "几何形体系列",
+          "类型": "圆的计算",
+          "知识点": "圆的周长与滚动圈数关系",
+          "经典样题": "车轮滚动问题中，路程、周长与转数的关系",
+          "考点": "滚动路程=车轮周长×转数",
+          "策略方法": "根据前后轮行驶相同的总路程，利用“总路程÷周长=转数”建立等量关系。",
+          "讲解要点举例": "滚动路程 = 周长 × 转数，总路程一定时，周长与转数成反比。",
+          "易错点": "混淆前后来回的转数差与周长关系；未正确列出方程。",
+          "总结归纳": "抓住总路程保持不变，利用路程、周长、转数三者之间的数量关系求解。"
+        }
+      ],
+      "teachingFocus": "掌握车轮滚动问题中“路程=周长×转数”的数量关系，学会通过路程相同和转数差列方程求解。",
+      "keyFormulaList": [
+        "滚动路程 = 周长 × 转数",
+        "转数 = 滚动路程 ÷ 周长"
+      ],
+      "zoneAnchors": {
+        "question": {
+          "label": {
+            "x": 5.7,
+            "y": 6.6,
+            "w": 7.1
+          },
+          "labelStartCoord": {
+            "x": 5.7,
+            "y": 6.6
+          },
+          "regionStartCoord": {
+            "x": 6,
+            "y": 13.32,
+            "w": 40.32,
+            "h": null
+          }
+        },
+        "analysis": {
+          "label": {
+            "x": 5.7,
+            "y": 34.5,
+            "w": 7.2
+          },
+          "labelStartCoord": {
+            "x": 5.7,
+            "y": 34.5
+          },
+          "regionStartCoord": {
+            "x": 6,
+            "y": 40.62,
+            "w": 44,
+            "h": 54.38
+          }
+        },
+        "solution": {
+          "label": {
+            "x": 53.7,
+            "y": 6.6,
+            "w": 7.4
+          },
+          "labelStartCoord": {
+            "x": 53.7,
+            "y": 6.6
+          },
+          "regionStartCoord": {
+            "x": 54,
+            "y": 14,
+            "w": 40,
+            "h": 44
+          }
+        },
+        "summary": {
+          "label": {
+            "x": 53.7,
+            "y": 62,
+            "w": 7.2
+          },
+          "labelStartCoord": {
+            "x": 53.7,
+            "y": 62
+          },
+          "regionStartCoord": {
+            "x": 54,
+            "y": 69.5,
+            "w": 40,
+            "h": 22
+          }
+        }
+      },
+      "stageRatios": {
+        "analysis": "5-15%",
+        "solution": "55-65%",
+        "summary": "5-10%",
+        "introAndClosing": "23%"
+      },
+      "stageRatioSuggestion": {
+        "type": "b",
+        "cuCode": "CU-03",
+        "category": "方法确定",
+        "topicExamples": "长方形&正方形(面积/周长)、平行四边形/梯形(面积)、植树、鸡兔同笼(假设)、归一、税率、利润利率、比和比例",
+        "suggestedRatio": {
+          "analysis": "5-15%",
+          "solution": "55-65%",
+          "summary": "5-10%",
+          "introAndClosing": "23%"
+        },
+        "essence": "解答绝对主体，标准结构",
+        "confidence": "high"
+      }
+    },
+    "meta": {
+      "problemType": "word",
+      "boardFocus": "relation_understanding",
+      "gradeLevel": "小学六年级",
+      "knowledgeTitle": "圆的周长与滚动圈数关系",
+      "canvasSize": {
+        "width": 1726,
+        "height": 980
+      }
+    },
+    "stats": {
+      "totalDuration": 90,
+      "totalDurationText": "1分30秒",
+      "stepCount": 10,
+      "charCount": 422,
+      "actionCount": 3
+    },
+    "checkInfo": {
+      "checkApplied": false,
+      "changeCount": 0
+    },
+    "rows": [
+      {
+        "duration": 2.5,
+        "durationLabel": "真实音频时长",
+        "stage": "题目",
+        "speech": "同学你好！很高兴为你讲解这道题！",
+        "audioUrl": "../audio-cache/85fac2c4c60ec0cfcab17e3d7f2385db.mp3",
+        "mp3": "../audio-cache/85fac2c4c60ec0cfcab17e3d7f2385db.mp3",
+        "audioDurationMs": 2482,
+        "board": {
+          "stage": "题目",
+          "content": "",
+          "startDelay": 0
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 2482,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 2482,
+            "endOffsetMs": 2482,
+            "text": "同学你好！很高兴为你讲解这道题！"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 2482,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 2482,
+            "endOffsetMs": 2482,
+            "text": "同学你好！很高兴为你讲解这道题！"
+          }
+        ]
+      },
+      {
+        "duration": 8.6,
+        "durationLabel": "真实音频时长",
+        "stage": "题目",
+        "speech": "我们来看这道题：前轮在720米的距离里比后轮多转40周，如果后轮的周长是2米，求前轮的周长。",
+        "audioUrl": "../audio-cache/955e15b0bc63458e1eb8915b31a52d6f.mp3",
+        "mp3": "../audio-cache/955e15b0bc63458e1eb8915b31a52d6f.mp3",
+        "audioDurationMs": 8620,
+        "board": {
+          "stage": "题目",
+          "content": "",
+          "startDelay": 0
+        },
+        "actionSpec": [
+          {
+            "action": {
+              "tool": "rough-notation",
+              "action": "underline",
+              "target": {
+                "region": "question",
+                "exactText": "720米",
+                "occurrence": 1
+              },
+              "order": 1,
+              "options": {
+                "type": "underline",
+                "animate": true,
+                "color": "#dc2626",
+                "strokeWidth": 2,
+                "padding": 5,
+                "iterations": 2,
+                "multiline": false,
+                "rtl": false
+              }
+            }
+          },
+          {
+            "action": {
+              "tool": "rough-notation",
+              "action": "underline",
+              "target": {
+                "region": "question",
+                "exactText": "多转40周",
+                "occurrence": 1
+              },
+              "order": 2,
+              "options": {
+                "type": "underline",
+                "animate": true,
+                "color": "#dc2626",
+                "strokeWidth": 2,
+                "padding": 5,
+                "iterations": 2,
+                "multiline": false,
+                "rtl": false
+              }
+            }
+          },
+          {
+            "action": {
+              "tool": "rough-notation",
+              "action": "underline",
+              "target": {
+                "region": "question",
+                "exactText": "后轮的周长是2米",
+                "occurrence": 1
+              },
+              "order": 3,
+              "options": {
+                "type": "underline",
+                "animate": true,
+                "color": "#dc2626",
+                "strokeWidth": 2,
+                "padding": 5,
+                "iterations": 2,
+                "multiline": false,
+                "rtl": false
+              }
+            }
+          }
+        ],
+        "estimatedDurationMs": 8620,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 8620,
+            "endOffsetMs": 8620,
+            "text": "我们来看这道题：前轮在720米的距离里比后轮多转40周，如果后轮的周长是2米，求前轮的周长。"
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 0,
+            "startOffsetMs": 1034,
+            "durationMs": 1000,
+            "endOffsetMs": 2034,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "720米",
+                  "occurrence": 1
+                },
+                "order": 1,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 1,
+            "startOffsetMs": 3034,
+            "durationMs": 1000,
+            "endOffsetMs": 4034,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "多转40周",
+                  "occurrence": 1
+                },
+                "order": 2,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 2,
+            "startOffsetMs": 5034,
+            "durationMs": 1500,
+            "endOffsetMs": 6534,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "后轮的周长是2米",
+                  "occurrence": 1
+                },
+                "order": 3,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 8620,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 8620,
+            "endOffsetMs": 8620,
+            "text": "我们来看这道题：前轮在720米的距离里比后轮多转40周，如果后轮的周长是2米，求前轮的周长。"
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 0,
+            "startOffsetMs": 1034,
+            "durationMs": 1000,
+            "endOffsetMs": 2034,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "720米",
+                  "occurrence": 1
+                },
+                "order": 1,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 1,
+            "startOffsetMs": 3034,
+            "durationMs": 1000,
+            "endOffsetMs": 4034,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "多转40周",
+                  "occurrence": 1
+                },
+                "order": 2,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          },
+          {
+            "type": "action",
+            "role": "punctuation_pause",
+            "index": 2,
+            "startOffsetMs": 5034,
+            "durationMs": 1500,
+            "endOffsetMs": 6534,
+            "action": {
+              "action": {
+                "tool": "rough-notation",
+                "action": "underline",
+                "target": {
+                  "region": "question",
+                  "exactText": "后轮的周长是2米",
+                  "occurrence": 1
+                },
+                "order": 3,
+                "options": {
+                  "type": "underline",
+                  "animate": true,
+                  "color": "#dc2626",
+                  "strokeWidth": 2,
+                  "padding": 5,
+                  "iterations": 2,
+                  "multiline": false,
+                  "rtl": false
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "duration": 9.2,
+        "durationLabel": "真实音频时长",
+        "stage": "分析",
+        "speech": "嗯……咱们先来想想哈，车轮滚动的时候，滚动的路程、周长还有转数，它们之间是个什么关系来着？还记得吗？",
+        "audioUrl": "../audio-cache/80cd848802c27e43575f7fce0a336db6.mp3",
+        "mp3": "../audio-cache/80cd848802c27e43575f7fce0a336db6.mp3",
+        "audioDurationMs": 9247,
+        "board": {
+          "stage": "分析",
+          "content": "",
+          "startDelay": 0
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 9247,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 9247,
+            "endOffsetMs": 9247,
+            "text": "嗯……咱们先来想想哈，车轮滚动的时候，滚动的路程、周长还有转数，它们之间是个什么关系来着？还记得吗？"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 9247,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 9247,
+            "endOffsetMs": 9247,
+            "text": "嗯……咱们先来想想哈，车轮滚动的时候，滚动的路程、周长还有转数，它们之间是个什么关系来着？还记得吗？"
+          }
+        ]
+      },
+      {
+        "duration": 10.8,
+        "durationLabel": "真实音频时长",
+        "stage": "分析",
+        "speech": "对啦，就是滚动路程等于周长乘以转数，是不是这个道理。那转数呢，就是总路程除以周长，对吧~这里可不要把公式顺序记反咯！",
+        "audioUrl": "../audio-cache/a6a7b122672c4279ffb5c440271d2566.mp3",
+        "mp3": "../audio-cache/a6a7b122672c4279ffb5c440271d2566.mp3",
+        "audioDurationMs": 10789,
+        "board": {
+          "stage": "分析",
+          "content": "转数=滚动路程.-.周长",
+          "startDelay": 3
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 10789,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10789,
+            "endOffsetMs": 10789,
+            "text": "对啦，就是滚动路程等于周长乘以转数，是不是这个道理。那转数呢，就是总路程除以周长，对吧~这里可不要把公式顺序记反咯！"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3000,
+            "durationMs": 2200,
+            "endOffsetMs": 5200,
+            "content": "转数=滚动路程.-.周长"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 10789,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10789,
+            "endOffsetMs": 10789,
+            "text": "对啦，就是滚动路程等于周长乘以转数，是不是这个道理。那转数呢，就是总路程除以周长，对吧~这里可不要把公式顺序记反咯！"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3000,
+            "durationMs": 2200,
+            "endOffsetMs": 5200,
+            "content": "转数=滚动路程.-.周长"
+          }
+        ]
+      },
+      {
+        "duration": 10.3,
+        "durationLabel": "真实音频时长",
+        "stage": "解答",
+        "speech": "好，那咱们先来看看后轮转了多少周。总路程是720米，后轮周长是2米，拿720除以2，就能算出后轮的转数啦。",
+        "audioUrl": "../audio-cache/7a34353fd12f0c7caeedb3c83ce9cee2.mp3",
+        "mp3": "../audio-cache/7a34353fd12f0c7caeedb3c83ce9cee2.mp3",
+        "audioDurationMs": 10318,
+        "board": {
+          "stage": "解答",
+          "content": "后轮转数：720.-.2=360（周）",
+          "startDelay": 3.5
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 10318,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10318,
+            "endOffsetMs": 10318,
+            "text": "好，那咱们先来看看后轮转了多少周。总路程是720米，后轮周长是2米，拿720除以2，就能算出后轮的转数啦。"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3500,
+            "durationMs": 3740,
+            "endOffsetMs": 7240,
+            "content": "后轮转数：720.-.2=360（周）"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 10318,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10318,
+            "endOffsetMs": 10318,
+            "text": "好，那咱们先来看看后轮转了多少周。总路程是720米，后轮周长是2米，拿720除以2，就能算出后轮的转数啦。"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3500,
+            "durationMs": 3740,
+            "endOffsetMs": 7240,
+            "content": "后轮转数：720.-.2=360（周）"
+          }
+        ]
+      },
+      {
+        "duration": 10.7,
+        "durationLabel": "真实音频时长",
+        "stage": "解答",
+        "speech": "后轮转了360周，题目说前轮比后轮多转40周，那前轮转了多少周呀？嗯，用360加上40，等于400周，是不是呀？",
+        "audioUrl": "../audio-cache/824715d9fcb4c7e51d3479d4c5abfce6.mp3",
+        "mp3": "../audio-cache/824715d9fcb4c7e51d3479d4c5abfce6.mp3",
+        "audioDurationMs": 10710,
+        "board": {
+          "stage": "解答",
+          "content": "前轮转数：360+40=400（周）",
+          "startDelay": 4
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 10710,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10710,
+            "endOffsetMs": 10710,
+            "text": "后轮转了360周，题目说前轮比后轮多转40周，那前轮转了多少周呀？嗯，用360加上40，等于400周，是不是呀？"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 4000,
+            "durationMs": 3960,
+            "endOffsetMs": 7960,
+            "content": "前轮转数：360+40=400（周）"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 10710,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10710,
+            "endOffsetMs": 10710,
+            "text": "后轮转了360周，题目说前轮比后轮多转40周，那前轮转了多少周呀？嗯，用360加上40，等于400周，是不是呀？"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 4000,
+            "durationMs": 3960,
+            "endOffsetMs": 7960,
+            "content": "前轮转数：360+40=400（周）"
+          }
+        ]
+      },
+      {
+        "duration": 10.1,
+        "durationLabel": "真实音频时长",
+        "stage": "解答",
+        "speech": "接下来，要求前轮的周长，怎么求呢？同样用总路程除以前轮的转数，对吧。总路程还是720米，前轮转了400周。",
+        "audioUrl": "../audio-cache/496fa03c7b1edf2dcf0ce452f4bb5897.mp3",
+        "mp3": "../audio-cache/496fa03c7b1edf2dcf0ce452f4bb5897.mp3",
+        "audioDurationMs": 10083,
+        "board": {
+          "stage": "解答",
+          "content": "前轮周长：720.-.400",
+          "startDelay": 3.5
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 10083,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10083,
+            "endOffsetMs": 10083,
+            "text": "接下来，要求前轮的周长，怎么求呢？同样用总路程除以前轮的转数，对吧。总路程还是720米，前轮转了400周。"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3500,
+            "durationMs": 2640,
+            "endOffsetMs": 6140,
+            "content": "前轮周长：720.-.400"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 10083,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 10083,
+            "endOffsetMs": 10083,
+            "text": "接下来，要求前轮的周长，怎么求呢？同样用总路程除以前轮的转数，对吧。总路程还是720米，前轮转了400周。"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 3500,
+            "durationMs": 2640,
+            "endOffsetMs": 6140,
+            "content": "前轮周长：720.-.400"
+          }
+        ]
+      },
+      {
+        "duration": 5.2,
+        "durationLabel": "真实音频时长",
+        "stage": "解答",
+        "speech": "来，咱们算一下，720除以400，等于1点8米，对不对？",
+        "audioUrl": "../audio-cache/88cf6534a1582ee590be0b2da8dbe227.mp3",
+        "mp3": "../audio-cache/88cf6534a1582ee590be0b2da8dbe227.mp3",
+        "audioDurationMs": 5224,
+        "board": {
+          "stage": "解答",
+          "content": "=1.8（米）",
+          "startDelay": 2
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 5224,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 5224,
+            "endOffsetMs": 5224,
+            "text": "来，咱们算一下，720除以400，等于1点8米，对不对？"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 2000,
+            "durationMs": 1540,
+            "endOffsetMs": 3540,
+            "content": "=1.8（米）"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 5224,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 5224,
+            "endOffsetMs": 5224,
+            "text": "来，咱们算一下，720除以400，等于1点8米，对不对？"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 2000,
+            "durationMs": 1540,
+            "endOffsetMs": 3540,
+            "content": "=1.8（米）"
+          }
+        ]
+      },
+      {
+        "duration": 20,
+        "durationLabel": "真实音频时长",
+        "stage": "总结",
+        "speech": "好嘞，我们来总结一下哈。这道题核心就是抓住滚动路程等于周长乘以转数这个关系，先求出已知车轮的转数，再根据转数差求出另一个车轮的转数，最后用总路程除以转数就拿到周长啦。以后再遇到车轮滚动问题，顺着这个思路走，一想就通！",
+        "audioUrl": "../audio-cache/bbf9827f9c58b9c1d3837d8ebb98f909.mp3",
+        "mp3": "../audio-cache/bbf9827f9c58b9c1d3837d8ebb98f909.mp3",
+        "audioDurationMs": 20036,
+        "board": {
+          "stage": "总结",
+          "content": "路程=周长x转数\n先求转数->再求周长",
+          "startDelay": 2.5
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 20036,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 20036,
+            "endOffsetMs": 20036,
+            "text": "好嘞，我们来总结一下哈。这道题核心就是抓住滚动路程等于周长乘以转数这个关系，先求出已知车轮的转数，再根据转数差求出另一个车轮的转数，最后用总路程除以转数就拿到周长啦。以后再遇到车轮滚动问题，顺着这个思路走，一想就通！"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 2500,
+            "durationMs": 3960,
+            "endOffsetMs": 6460,
+            "content": "路程=周长x转数\n先求转数->再求周长"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 20036,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 20036,
+            "endOffsetMs": 20036,
+            "text": "好嘞，我们来总结一下哈。这道题核心就是抓住滚动路程等于周长乘以转数这个关系，先求出已知车轮的转数，再根据转数差求出另一个车轮的转数，最后用总路程除以转数就拿到周长啦。以后再遇到车轮滚动问题，顺着这个思路走，一想就通！"
+          },
+          {
+            "type": "board",
+            "role": "writing",
+            "startOffsetMs": 2500,
+            "durationMs": 3960,
+            "endOffsetMs": 6460,
+            "content": "路程=周长x转数\n先求转数->再求周长"
+          }
+        ]
+      },
+      {
+        "duration": 2.7,
+        "durationLabel": "真实音频时长",
+        "stage": "总结",
+        "speech": "路虽远，行则将至，加油！",
+        "audioUrl": "../audio-cache/c4343305cca1b6d49c24a896873f897b.mp3",
+        "mp3": "../audio-cache/c4343305cca1b6d49c24a896873f897b.mp3",
+        "audioDurationMs": 2664,
+        "board": {
+          "stage": "总结",
+          "content": "",
+          "startDelay": 1.5
+        },
+        "actionSpec": [],
+        "estimatedDurationMs": 2664,
+        "exclusiveExecutionPlan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 2664,
+            "endOffsetMs": 2664,
+            "text": "路虽远，行则将至，加油！"
+          }
+        ],
+        "timingPolicy": "speech-full-board-action-mutually-exclusive",
+        "totalDurationMs": 2664,
+        "plan": [
+          {
+            "type": "speech",
+            "role": "narration_full",
+            "startOffsetMs": 0,
+            "durationMs": 2664,
+            "endOffsetMs": 2664,
+            "text": "路虽远，行则将至，加油！"
+          }
+        ]
+      }
+    ],
+    "filename": "deliverable-20261030-125431-690.json",
+    "htmlFilename": "deliverable-20261030-125431-690.html",
+    "createdAt": "2026-10-30T04:54:31.732Z"
+  }
+}

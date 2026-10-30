@@ -1,0 +1,339 @@
+{
+  "handoffVersion": 1,
+  "confirmedAt": "2026-10-30T04:52:07.970Z",
+  "problemText": "前轮在720米的距离里比后轮多转40周，如果后轮的周长是2米，求前轮的周长。",
+  "problemType": "word",
+  "boardFocus": "relation_understanding",
+  "relatedKnowledge": [
+    {
+      "编号": "kp_147",
+      "学段": "5-6年级",
+      "系列": "几何形体系列",
+      "类型": "圆的计算",
+      "知识点": "圆的周长与滚动圈数关系",
+      "经典样题": "车轮滚动问题中，路程、周长与转数的关系",
+      "考点": "滚动路程=车轮周长×转数",
+      "策略方法": "根据前后轮行驶相同的总路程，利用“总路程÷周长=转数”建立等量关系。",
+      "讲解要点举例": "滚动路程 = 周长 × 转数，总路程一定时，周长与转数成反比。",
+      "易错点": "混淆前后来回的转数差与周长关系；未正确列出方程。",
+      "总结归纳": "抓住总路程保持不变，利用路程、周长、转数三者之间的数量关系求解。"
+    }
+  ],
+  "knowledgeAnalysis": {
+    "suggestedGrade": "小学六年级",
+    "coreKnowledge": [
+      {
+        "knowledgeId": "",
+        "knowledgePoint": "轮子滚动问题与行程应用题",
+        "formula": "滚动路程 = 周长 × 转数",
+        "examinationPoint": "路程一定时，车轮周长与转数成反比例；利用等量关系列方程求解行程中的倍分或数量差问题。",
+        "strategy": "设未知数（前轮周长或转数），根据前后轮行驶相同的总路程，建立关于转数的等量关系式。",
+        "commonMistakes": [
+          "混淆前后来回的转数差与周长关系，未正确建立“路程÷周长=转数”的方程模型。"
+        ],
+        "summary": "车轮滚动类应用题的核心是抓住总路程保持不变，通过路程、周长、转数三者之间的数量关系列方程解决。",
+        "rawKnowledgeRecord": {}
+      }
+    ],
+    "teachingFocus": "掌握车轮滚动问题中“路程=周长×转数”的数量关系，学会通过路程相同和转数差列方程求解。",
+    "keyFormulaList": [
+      "滚动路程 = 周长 × 转数",
+      "转数 = 滚动路程 ÷ 周长"
+    ],
+    "formulaHints": [
+      "滚动路程公式：滚动路程 = 周长 × 转数，已知周长和转数求总路程时用",
+      "转数公式：转数 = 滚动路程 ÷ 周长，已知总路程和周长求转数时用"
+    ],
+    "commonMistakes": [
+      "混淆前后来回的转数差与周长关系",
+      "未正确建立“路程÷周长=转数”的方程模型"
+    ]
+  },
+  "suggestedGrade": "小学六年级",
+  "uncertainItems": [],
+  "suggestedLayout": {
+    "topic": {
+      "x": "6%",
+      "y": "8%",
+      "w": "88%"
+    },
+    "analysis": {
+      "x": "6%",
+      "y": "28%",
+      "w": "88%"
+    },
+    "solution": {
+      "x": "6%",
+      "y": "50%",
+      "w": "88%"
+    },
+    "summary": {
+      "x": "6%",
+      "y": "78%",
+      "w": "88%"
+    }
+  },
+  "imageKind": "text_only",
+  "keepOriginal": false,
+  "coordinateSpec": {
+    "coordinateSystem": "百分比坐标（0—100），原点左上",
+    "format": {
+      "region": "区域：[左%, 上%, 宽%, 高%]，所有百分比最多保留 2 位小数",
+      "point": "起点/终点：[x%, y%]"
+    },
+    "example": "若分析区动作锚点为 [6, 40.62]，则动作参考点为 [6, 40.62]（40.62 = 默认分析区 y，见 boardLayout.js DEFAULT_BOARD_PLAN 派生）"
+  },
+  "zoneAnchors": {
+    "question": {
+      "label": {
+        "x": 5.7,
+        "y": 6.6,
+        "w": 7.1
+      },
+      "labelStartCoord": {
+        "x": 5.7,
+        "y": 6.6
+      },
+      "regionStartCoord": {
+        "x": 6,
+        "y": 13.32,
+        "w": 40.32,
+        "h": null
+      }
+    },
+    "analysis": {
+      "label": {
+        "x": 5.7,
+        "y": 34.5,
+        "w": 7.2
+      },
+      "labelStartCoord": {
+        "x": 5.7,
+        "y": 34.5
+      },
+      "regionStartCoord": {
+        "x": 6,
+        "y": 40.62,
+        "w": 44,
+        "h": 54.38
+      }
+    },
+    "solution": {
+      "label": {
+        "x": 53.7,
+        "y": 6.6,
+        "w": 7.4
+      },
+      "labelStartCoord": {
+        "x": 53.7,
+        "y": 6.6
+      },
+      "regionStartCoord": {
+        "x": 54,
+        "y": 14,
+        "w": 40,
+        "h": 44
+      }
+    },
+    "summary": {
+      "label": {
+        "x": 53.7,
+        "y": 62,
+        "w": 7.2
+      },
+      "labelStartCoord": {
+        "x": 53.7,
+        "y": 62
+      },
+      "regionStartCoord": {
+        "x": 54,
+        "y": 69.5,
+        "w": 40,
+        "h": 22
+      }
+    }
+  },
+  "topicLayout": {
+    "topicLabel": {
+      "x": 5.7,
+      "y": 6.6,
+      "w": 7.1
+    },
+    "question": {
+      "x": 6,
+      "y": 13.32,
+      "w": 40.32,
+      "fontSize": 30
+    },
+    "image": null,
+    "keepOriginal": false,
+    "blocks": null
+  },
+  "boardPlan": {
+    "canvas": {
+      "w": 1726,
+      "h": 980
+    },
+    "layoutMode": "portrait",
+    "topicBottomPct": 22.49,
+    "topicLabel": {
+      "x": 5.7,
+      "y": 6.6,
+      "w": 7.1
+    },
+    "question": {
+      "x": 6,
+      "y": 13.32,
+      "w": 40.32,
+      "fontSize": 30
+    },
+    "image": null,
+    "analysisLabel": {
+      "x": 5.7,
+      "y": 34.5,
+      "w": 7.2
+    },
+    "analysis": {
+      "x": 6,
+      "y": 40.62,
+      "w": 44,
+      "h": 54.38
+    },
+    "solutionLabel": {
+      "x": 53.7,
+      "y": 6.6,
+      "w": 7.4
+    },
+    "solution": {
+      "x": 54,
+      "y": 14,
+      "w": 40,
+      "h": 44
+    },
+    "summaryLabel": {
+      "x": 53.7,
+      "y": 62,
+      "w": 7.2
+    },
+    "summary": {
+      "x": 54,
+      "y": 69.5,
+      "w": 40,
+      "h": 22
+    },
+    "plannedAt": "2026-10-30T04:52:00.700Z",
+    "method": "verified-layout-rule",
+    "overflow": false
+  },
+  "canvasParams": {
+    "canvasSize": {
+      "width": 1726,
+      "height": 980,
+      "unit": "px",
+      "origin": "左上角(0,0), X向右Y向下"
+    },
+    "coordinateSystem": "百分比坐标 0-100",
+    "fontSource": {
+      "handwriting": {
+        "family": "LikeJianJianTi",
+        "choice": "lijian",
+        "fontStack": "\"LikeJianJianTi\", \"平方乔木体\", \"平方韶华体\", \"平方上上谦体\", \"平方三生体\", \"PingFangSaTuoTi\", KaiTi, STKaiti, \"PingFang SC\", serif",
+        "label": "手写体（分析/解答/总结板书，主字体=LikeJianJianTi CDN 490）",
+        "fontWeight": "normal",
+        "cssHref": "/fonts/board-local.css",
+        "cssHrefFallbacks": [
+          "/fonts/board-local.css",
+          "https://fontsapi.zeoseven.com/507/main/result.css",
+          "https://fontsapi.zeoseven.com/511/main/result.css",
+          "https://fontsapi.zeoseven.com/510/main/result.css",
+          "https://fontsapi.zeoseven.com/509/main/result.css"
+        ],
+        "loadSnippet": "<link href=\"/fonts/board-local.css\" onload=\"this.rel='stylesheet'\" rel=\"preload\" as=\"style\" crossorigin />",
+        "loadSnippetFallbacks": "<link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/507/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/511/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/510/main/result.css\" media=\"print\" onload=\"this.media='all'\" />\n        <link rel=\"stylesheet\" href=\"https://fontsapi.zeoseven.com/509/main/result.css\" media=\"print\" onload=\"this.media='all'\" />",
+        "fallbackSnippet": "<noscript><link rel=\"stylesheet\" href=\"/fonts/board-local.css\" /></noscript>",
+        "usage": "渲染前必须先加载该 CSS（font-family: \"LikeJianJianTi\"; font-weight: normal），字体栈 fallback 顺序见 fontStack；490 不可用时按栈降级"
+      },
+      "question": {
+        "family": "微软雅黑（印刷体，本地字体）",
+        "stack": "\"Microsoft YaHei\"",
+        "label": "印刷体（题目层，微软雅黑本地字体，不加载网络字体）",
+        "fontWeight": "normal"
+      }
+    },
+    "fontSize": {
+      "question": {
+        "px": 30,
+        "family": "微软雅黑（印刷体，30px）",
+        "color": "黑色"
+      },
+      "analysis": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "红色"
+      },
+      "solution": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "黑色"
+      },
+      "summary": {
+        "px": 40,
+        "family": "LikeJianJianTi（手写体，网络字体 fontSource.handwriting 主 CDN 490，font-weight: normal，约题目的1.2~1.5倍，推荐40px）",
+        "color": "黑色"
+      }
+    },
+    "lineHeight": {
+      "policy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px",
+      "question": "自然+2px 分数余量（无强制行高规范）",
+      "others": "自然+4px（2px分数余量+2px行距呼吸，无强制行高规范）",
+      "estimateRatio": 1.2,
+      "extraPx": 2,
+      "boardExtraPx": 4
+    },
+    "letterSpacing": {
+      "question": "0",
+      "others": "下游渲染参数：字距均匀无随机（2026-10-17 书写抖动全拔，B 不需要处理）"
+    },
+    "style": "老师上课草算演示，微微达芬奇手稿style（草稿推演质感，轻盈生动；板书绝不可溢出画布）",
+    "boardSpeed": "下游渲染参数：1秒约4.5个汉字，每行±14.000000000000002%轻微抖动；书写时长超出音频窗口时自适应加速压进音频内（音频=行时长唯一主时钟）",
+    "boardSpeedCharsPerSec": 4.5,
+    "boardSpeedJitter": 0.14,
+    "boardSpeedAdaptiveCompress": true,
+    "actionSpeed": "rough-notation underline/circle",
+    "lineHeightPolicy": "自然行高（CSS line-height: normal / 字体自身度量）+2px 分数余量（分数上下结构越出行盒需呼吸空间），不设强制行高规范；区域内行内段落自然间距、自然换行；板书层（分析/解答/总结）行距余量 4px = 2px 分数余量 + 2px 行距呼吸（2026-10-22 夏夏拍板「自动换行的行高再加 2px 左右，题目字号除外」），题目层维持 2px"
+  },
+  "showGrid": true,
+  "agentPageName": "第1步 · 贴题识别",
+  "agentCapability": "multimodal",
+  "screenshotUrl": "/pic/shot-20261030-125202-153.jpg",
+  "knowledgeBasePath": "doc/knowledge-a.compact.json",
+  "essence": "解答绝对主体，标准结构",
+  "stageRatioSuggestion": {
+    "type": "b",
+    "cuCode": "CU-03",
+    "category": "方法确定",
+    "topicExamples": "长方形&正方形(面积/周长)、平行四边形/梯形(面积)、植树、鸡兔同笼(假设)、归一、税率、利润利率、比和比例",
+    "suggestedRatio": {
+      "analysis": "5-15%",
+      "solution": "55-65%",
+      "summary": "5-10%",
+      "introAndClosing": "23%"
+    },
+    "essence": "解答绝对主体，标准结构",
+    "confidence": "high"
+  },
+  "环节配比占比": {
+    "type": "b",
+    "cuCode": "CU-03",
+    "category": "方法确定",
+    "topicExamples": "长方形&正方形(面积/周长)、平行四边形/梯形(面积)、植树、鸡兔同笼(假设)、归一、税率、利润利率、比和比例",
+    "suggestedRatio": {
+      "analysis": "5-15%",
+      "solution": "55-65%",
+      "summary": "5-10%",
+      "introAndClosing": "23%"
+    },
+    "essence": "解答绝对主体，标准结构",
+    "confidence": "high"
+  }
+}
