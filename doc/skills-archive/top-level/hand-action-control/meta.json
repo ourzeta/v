@@ -1,0 +1,56 @@
+{
+  "name": "hand-action-control",
+  "version": "1.3.0",
+  "archetype": "workflow",
+  "description": "板书手部动作互斥调度与一维单手时间线技巧蒸馏。teacher-hand-exclusive 互斥，动作 1.0 三动作白名单（rough-notation underline/circle + rough-line 横线，Task 43 夏夏拍板，highlight/rough-arrow/draw 已砍），时长由程序分档算（画圈 1s；下划线按字数 1/1.5/2s；横线 1s），Agent 不得填秒数；entry 级 triggerKeyword 口播触发词锚定（Task 43：逐字存在于本行 speech，说到该词时刻起笔，miss 退串行，互斥钳制由程序保证，真源 timing.js resolveKeywordTimeMs）。",
+  "created": "2026-09-19",
+  "updated": "2026-10-16",
+  "sources": [
+    "src/board-tools/handActionScheduler.js",
+    "src/board-tools/boardToolCatalog.js",
+    "src/board-tools/roughNotationTool.js",
+    "src/board-tools/roughDrawingTool.js",
+    "src/agent-b-v2/timing.js"
+  ],
+  "distillation_contract": "Distill [手部动作互斥调度与一维单手时间线] as a [workflow] pack so it can help with [Agent B 写 actionSpec / 渲染层动作调度 / Check Agent 校验工具合法性], using [src/board-tools/handActionScheduler.js + boardToolCatalog.js + roughNotationTool.js + roughDrawingTool.js + timing.js], while respecting [teacher-hand-exclusive 互斥 / 只用注册工具白名单 / 时长由程序算 Agent 不得填秒数 / 抬笔间隔硬下限].",
+  "core_sections": [
+    "互斥模型（teacher-hand-exclusive）",
+    "工具白名单（动作 1.0 三动作：rough-notation underline/circle + rough-line 横线）",
+    "触发词锚定 triggerKeyword（entry 级，与 action 平级）",
+    "rough-notation（划重点）",
+    "rough-line（画横线）",
+    "一维单手时间线",
+    "actionSpec 输出规范",
+    "反模式与失败模式"
+  ],
+  "key_rules": [
+    "互斥模式: teacher-hand-exclusive, 任意时刻只一笔",
+    "L4 用户透明层不进互斥队列",
+    "工具白名单: rough-notation(underline/circle) / rough-line（Task 43 动作 1.0 夏夏拍板三动作；highlight/rough-arrow/draw 已砍）",
+    "triggerKeyword 是 entry 级字段（与 action 平级，不写在 action 内部）: 口播触发词，动作在说到该词时刻起笔（比例映射，真源 timing.js resolveKeywordTimeMs）",
+    "triggerKeyword 必须逐字存在于本行 speech 原文（禁止改写/拼接）; miss 退回默认串行排期，不报错不丢动作",
+    "时间互斥铁律由程序钳制保证（关键词时点早于板书写完/上一动作结束则自动顺延），Agent 不得填 durationMs/estimatedDurationMs/gapAfterMs/seed",
+    "board 域零 keyword（keyword/keywords/cue/triggerAtWords 禁用），actionSpec entry 级 triggerKeyword 是唯一受控例外（旧版 triggerAt 已弃用）",
+    "Agent 不得自造工具名, 不在白名单 → 校验失败",
+    "Agent 不得填 durationMs / estimatedDurationMs / gapAfterMs / seed",
+    "时长由程序分档算 (rough-notation: 画圈固定 1000ms / 下划线按 exactText 字数 ≤5字 1000 / >5字 1500 / >10字 2000, 真源 timing.js)",
+    "时长由程序固定算 (rough-line 横线固定 1000ms; 旧几何长度 180px/s 口径废弃, rough-arrow 已砍)",
+    "抬笔间隔硬下限 MIN_HAND_LIFT_GAP_MS = 1000ms (真源 boardToolTiming.js; 2026-10-13 勘误: 曾误标 600ms)",
+    "动作 1.0 颜色统一红 #dc2626 (下划线/画圈/横线同红; yellow #f8e58c 荧光黄与 ink 墨黑已废弃)",
+    "笔宽 normal=2 / emphasis=3",
+    "坐标百分比 0—100 原点左上, 不得越界",
+    "rough 图形只能画在 question/analysis/solution/summary 区域内",
+    "rough-arrow 已砍 (Task 43 动作 1.0), 箭头叙事退出白名单",
+    "cancelAll() 用 generation += 1 让所有在途任务抛 '已取消'",
+    "enqueueAll 按 order 升序排列后逐个 enqueue",
+    "单 Row 时间线: 口播+板书+动作取最大, 跨 Row 加 ROW_GAP_MS=1000ms (2026-10-15 夏夏拍板 1500→1000)",
+    "板书起手延迟 = round(max(0, row.board.startDelay||0)*1000)（Task 52 startDelay 字面语义: 0/缺省=语音一起笔即写, 无自动兜底; 旧 min(2000,max(1000,speechDurationMs*0.2)) 比例兜底已废, 真源 timing.js）"
+  ],
+  "confidence": "high",
+  "boundaries": [
+    "本 skill 只覆盖动作调度与白名单, 不覆盖口播语速/标点停顿 (见 speech-board-timing)",
+    "不覆盖布局坐标 (见 board-zone-layout)",
+    "不覆盖字体加载 (见 handwriting-font-policy)",
+    "不覆盖教学方法/四环教学法/人设风格"
+  ]
+}

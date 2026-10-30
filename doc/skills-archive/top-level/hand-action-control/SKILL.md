@@ -1,0 +1,355 @@
+---
+name: hand-action-control
+description: "板书手部动作互斥调度与一维单手时间线技巧蒸馏。teacher-hand-exclusive 互斥模式（任意时刻只允许一笔），generation-based cancelAll 防越界残留，动作 1.0 三动作（rough-notation underline/circle + rough-line 横线）白名单（Task 43 夏夏拍板，highlight/rough-arrow/draw 已砍），Agent 不得自造调用，时长由程序分档计算（画圈 1s；下划线按字数 1/1.5/2s；横线 1s）（Agent 不得填秒数），order 正整数顺序入队，抬笔间隔 MIN_HAND_LIFT_GAP_MS=1000ms（真源 boardToolTiming.js），entry 级 triggerKeyword 口播触发词锚定（Task 43：动作在说到该词时刻起笔，逐字存在于本行 speech，互斥钳制由程序保证，真源 timing.js resolveKeywordTimeMs）。用于 Agent B 写 actionSpec / 渲染层动作调度 / Check Agent 校验工具合法性。"
+version: "1.3.0"
+archetype: workflow
+trigger: "写 actionSpec/调度手部动作/校验工具合法性/手部互斥控制/抬笔间隔/动作时长估算"
+---
+
+# 板书手部动作互斥调度与一维单手时间线
+
+> *"老师只有一只手。任意时刻只允许一笔，写字、画图、标记不能并发。"*
+
+## 蒸馏合同
+
+`Distill [手部动作互斥调度与一维单手时间线] as a [workflow] pack so it can help with [Agent B 写 actionSpec / 渲染层动作调度 / Check Agent 校验工具合法性], using [src/board-tools/handActionScheduler.js + src/board-tools/boardToolCatalog.js + src/board-tools/roughNotationTool.js + src/board-tools/roughDrawingTool.js], while respecting [teacher-hand-exclusive 互斥 / 只用注册工具白名单 / 时长由程序算 Agent 不得填秒数 / 抬笔间隔硬下限].`
+
+---
+
+## 一、互斥模型（teacher-hand-exclusive）
+
+### 1.1 核心规则
+
+```
+任意时刻只允许一笔。
+写字、画图、标记、连线 → 全部进同一队列，串行执行。
+L4 用户透明层不进入此队列。
+```
+
+### 1.2 互斥实现（createHandActionScheduler）
+
+```js
+const scheduler = createHandActionScheduler({ minimumGapMs })
+
+// 入队一个动作 plan（必须含 id, durationMs, execute, 可选 gapAfterMs, order, cancel）
+scheduler.enqueue(plan)
+
+// 批量入队（按 order 升序排列后逐个 enqueue）
+scheduler.enqueueAll(plans)
+
+// 取消全部（generation + 1 让所有在途任务抛 "已取消"）
+scheduler.cancelAll()
+
+// 订阅状态变化
+scheduler.subscribe((state) => { /* { activeActionId, nextAllowedAt, minimumGapMs } */ })
+```
+
+### 1.3 关键约束
+
+| 约束 | 值 | 说明 |
+|---|---|---|
+| `minimumGapMs` | `MIN_HAND_LIFT_GAP_MS`（1000ms） | 抬笔换手间隔硬下限，<1000ms 直接抛错（2026-10-13 勘误：曾误标 600ms，与 boardToolTiming.js 真源不符） |
+| `plan.id` | 必填 | 唯一标识，用于 cancel / 互斥冲突报错 |
+| `plan.durationMs` | 必填正数 | 由程序算（见 §四），Agent 不得填 |
+| `plan.execute` | 必填函数 | 真正执行动作（DOM 写入 / canvas 绘制） |
+| `plan.gapAfterMs` | 可选 | 默认 = minimumGapMs，不得 < minimumGapMs |
+| `plan.order` | 可选正整数 | enqueueAll 时按 order 升序 |
+
+### 1.4 generation-based cancel（防越界残留）
+
+```js
+let generation = 0
+
+function enqueue(plan) {
+  const queuedGeneration = generation
+  const task = tail.then(async () => {
+    if (queuedGeneration !== generation) throw new Error(`动作 ${plan.id} 已取消`)
+    // ... waitBefore, execute, await durationMs ...
+    if (queuedGeneration === generation) {
+      nextAllowedAt = Date.now() + Math.max(plan.gapAfterMs ?? minimumGapMs, minimumGapMs)
+    }
+  })
+}
+
+function cancelAll() {
+  generation += 1            // ← 让所有在途任务的 generation 检查失败
+  activePlan?.cancel?.()
+  nextAllowedAt = 0
+}
+```
+
+> **设计意图**：用户中途切题/重生成时，老的 in-flight 动作不能继续写画布，否则会污染新题。`generation += 1` 让所有 `queuedGeneration !== generation` 的任务在下一个 await 点抛错退出，干净的回收。
+
+---
+
+## 二、工具白名单（动作 1.0 三动作，不得自造）
+
+### 2.1 工具清单（boardToolCatalog v1.5.0，动作 1.0）
+
+| tool id | 用途 | actions |
+|---|---|---|
+| `rough-notation` | 只用于给已存在文字划重点，不画几何图形 | `underline` / `circle`（highlight 已砍） |
+| `rough-line` | 画横线（辅助线、边线、高线） | — |
+
+> ★ Task 43 夏夏拍板「动作 1.0」：highlight / rough-arrow / draw 已砍（「其他做我怕做不好」），白名单只剩上表三动作。
+
+### 2.2 注册与校验
+
+```js
+// 注册表
+getAgentBoardToolCatalog()
+// → { version, rule, tools: [roughNotation, roughLine] }（动作 1.0 三动作；arrow/draw 已砍）
+
+// 校验单个 action
+validateBoardToolAction(action)
+// → { ok: true, value: { ...normalized } } 或 { ok: false, error }
+
+// 运行时
+createBoardToolRuntime({ resolveTarget, resolveRegion, resolveCanvas, resolveRegionBounds, boardPlan })
+// → { enqueue(action), enqueueAll(actions), clear(), subscribe, getState, listTargets }
+```
+
+### 2.3 Agent 不得做的事
+
+| 禁止 | 原因 |
+|---|---|
+| 自造工具名（如 `box`, `text`） | 不在白名单 → `validateBoardToolAction` 报 `未支持的板书工具`；注意 `circle` 是 `rough-notation` 的合法 action（2026-10-13 第七轮接入），不是自造工具 |
+| 填 `durationMs` / `estimatedDurationMs` | 时长由程序算，Agent 填了报 `Agent 不得覆盖` |
+| 填 `gapAfterMs` < 1000ms | 抬笔间隔硬下限，<1000 抛错 |
+| 填 `seed` | roughjs 随机种子由程序生成，避免 Agent 控制笔触 |
+| 跨区画图 | rough 图形只能画在 question/analysis/solution/summary 区域内 |
+| 坐标超 0—100 | rough-line 的 start/end 必须是百分比 0—100 |
+
+---
+
+## 三、rough-notation 工具（划重点）
+
+### 3.1 动作与颜色锁定
+
+| action | 颜色 | 用途 |
+|---|---|---|
+| `underline` | **红色** `#dc2626`（固定，不可改） | 在关键词/数字下方画手绘下划线 |
+| `circle` | **红色** `#dc2626`（固定，不可改） | 在关键词/数字外画手绘圈（夏夏指定的核心兜底动作，2026-10-13 第七轮接入；Task 43 动作 1.0：固定 1000ms） |
+
+> ★ Task 43 夏夏拍板：highlight 黄色荧光已砍，动作 1.0 颜色统一红 `#dc2626`（yellow `#f8e58c`、旧红 `#d64545` 已废弃）。
+
+> Agent 传 `options.colorId` 与锁定值不符 → 抛 `颜色固定为 xxx`。
+
+### 3.2 目标定位（两种方式）
+
+```js
+// 方式 A: 已有稳定 targetId（C 创建过）
+{ tool: 'rough-notation', action: 'underline', targetId: 'q-key-1', order: 1 }
+
+// 方式 B: 区域 + 原文 + 出现次（推荐 Agent B 用）
+{
+  tool: 'rough-notation',
+  action: 'underline',
+  target: { region: 'question', exactText: '题目中要标记的原文', occurrence: 1 },
+  order: 2,
+  options: { multiline: false, rtl: false }
+}
+```
+
+> **`exactText` 必须是完整原文，禁止改写**。`occurrence` 默认 1，同文重复时指定第几个。
+
+### 3.3 时长自动计算（Task 43 分档口径，真源 timing.js estimateActionDuration）
+
+```js
+NOTATION_DURATION_MS = { underline: 1000, circle: 1000 }
+UNDERLINE_LONG_MS  = 1500   // >5 字
+UNDERLINE_XLONG_MS = 2000   // >10 字
+
+function estimateActionDuration(action) {
+  if (action.action === 'circle') return 1000         // 画圈固定 1s
+  const textLen = [...String(action.target.exactText || '')].length
+  if (textLen > 10) return 2000                        // 下划线按字数分档
+  if (textLen > 5)  return 1500
+  return 1000
+}
+```
+
+> 例：`长方形`（3 字）≈ 1000ms，`9x20.4`（6 字符）≈ 1500ms。Agent 不填，程序分档计算（严格 1~2 秒区间；旧「按汉字宽度 400ms/字」口径已废弃，DOM 宽度度量仅作渲染层兜底）。
+
+---
+
+## 四、rough-line 工具（画横线）
+
+### 4.1 坐标格式（百分比 0—100）
+
+```js
+{
+  tool: 'rough-line',
+  region: 'analysis',
+  order: 3,
+  start: [10, 45],   // 百分比 [x, y]，0—100
+  end:   [50, 45],
+  style: { colorId: 'red', strokeWidthId: 'normal' }
+}
+```
+
+### 4.2 颜色与笔宽
+
+| colorId | 值 |
+|---|---|
+| `red` | `#dc2626`（统一红，默认；Task 43 拍板，ink 墨黑已砍） |
+
+| strokeWidthId | 值 |
+|---|---|
+| `normal` | 2（默认） |
+| `emphasis` | 3（粗，用于高线/关键线） |
+
+### 4.3 时长自动计算（Task 43 固定档）
+
+```js
+ROUGH_LINE_DURATION_MS = 1000  // 横线固定 1000ms（与画圈同级，1~2 秒区间低档）
+```
+
+> 真源 roughDrawingTool.js ROUGH_LINE_DURATION_MS（与 timing.js TOOL_DURATION_MS 同值）。旧「几何长度 180px/s + 最短 600ms」速度口径已废弃。
+
+### 4.4 箭头已砍（Task 43 动作 1.0）
+
+> rough-arrow 及其箭头头部自动生成逻辑已退出白名单（「其他做我怕做不好」）；三动作之外不再有箭头叙事。
+
+---
+
+## 五、一维单手时间线（computeRowGroupTimeline）
+
+### 5.1 单 Row 内的时间线（绝对串行）
+
+```
+Row 开始 (t=0)
+    ↓
+[口播] speechDurationMs ──────────────────────────────────┐
+    ↓                                                       │
+[板书] boardStartDelayMs → boardDurationMs                  │ 两者取最大
+    ↓                                                       │
+[动作1] startOffsetMs → durationMs → + HAND_LIFT_GAP_MS    │
+    ↓                                                       │
+[动作2] startOffsetMs → durationMs → + HAND_LIFT_GAP_MS    │
+    ↓                                                       │
+handWorkEndMs                                              │
+    ↓                                                       │
+rowTotalDurationMs = max(speechDurationMs, handWorkEndMs) ──┘
+```
+
+### 5.2 关键参数
+
+| 参数 | 值 | 说明 |
+|---|---|---|
+| `boardStartDelayMs` | `round(max(0, Number(row.board.startDelay) \|\| 0) * 1000)` | 板书起手延迟 = startDelay 字面语义（秒→ms）：0/缺省=语音一起笔即写，无自动兜底（Task 52；真源 timing.js；旧 `min(2000, max(1000, speechDurationMs*0.2))` 比例兜底已废，不要再写） |
+| `handCursorMs` | 累加 | 动作串行游标，每个动作 end + HAND_LIFT_GAP_MS |
+| `HAND_LIFT_GAP_MS` | 1000ms | 动作间抬笔间隔（= MIN_HAND_LIFT_GAP_MS，真源 boardToolTiming.js；2026-10-13 归一，曾平行写死 600ms） |
+| `rowTotalDurationMs` | `max(speech, hand)` | Row 总耗时 |
+
+### 5.3 跨 Row 全局时间线
+
+```
+Row 1: estimatedStartMs = 0, estimatedEndMs = T1
+       globalCursorMs = T1 + ROW_GAP_MS
+Row 2: estimatedStartMs = T1 + ROW_GAP_MS, estimatedEndMs = ...
+       globalCursorMs = ...
+...
+```
+
+`AGENT_B_V2_ROW_GAP_MS = 1000ms`（Row 间停顿；2026-10-15 夏夏拍板 1500→1000，口播自然语句停顿）。
+
+---
+
+## 六、actionSpec 输出规范（Agent B 必读）
+
+### 6.1 字段
+
+```js
+{
+  tool: 'rough-notation' | 'rough-line',        // 动作 1.0 三动作（arrow/draw 已砍）
+  action: 'underline' | 'circle',  // 仅 rough-notation 需要（highlight 已砍）
+  region: 'question' | 'analysis' | 'solution' | 'summary',
+  order: 正整数,                       // 单手队列顺序
+  target: { region, exactText, occurrence },  // rough-notation 方式 B
+  targetId: 'string',                 // rough-notation 方式 A
+  start: [x, y], end: [x, y],         // rough-line，百分比 0—100
+  style: { colorId, strokeWidthId },  // rough-line（colorId 仅 red，ink 已砍）
+  options: { multiline, rtl }         // rough-notation
+}
+// ⚠ 上表是 action 内部字段。entry 级（与 action 平级、不写在 action 内部）
+// 只有一个受控字段 triggerKeyword（口播触发词，见 §6.4）；
+// 旧版 triggerAt 已弃用（contract 归一层告警并忽略，不要再输出）。
+```
+
+### 6.2 B 不得填的字段
+
+| 字段 | 原因 |
+|---|---|
+| `durationMs` / `estimatedDurationMs` | 程序分档算（画圈/横线固定 1000，下划线按字数 1000~2000） |
+| `gapAfterMs` | 默认 = MIN_HAND_LIFT_GAP_MS |
+| `seed` | roughjs 随机种子 |
+| 任意未注册字段 | 白名单外的字段直接被 validate 拒 |
+
+### 6.3 B 必须填的字段
+
+| 字段 | 要求 |
+|---|---|
+| `tool` | 动作 1.0 三选一（rough-notation underline/circle + rough-line） |
+| `order` | 正整数，单手队列顺序 |
+| `target` 或 `targetId` | rough-notation 二选一 |
+| `region` | rough-line 必填，限定绘图不跨区 |
+| `start` / `end` | rough-line 必填，百分比 0—100 |
+
+### 6.4 触发词锚定 triggerKeyword（Task 43 动作 1.0，entry 级）
+
+`triggerKeyword` 是 **entry 级字段：与 `action` 平级，写在 actionSpec 数组每一项的外层，绝不写在 `action` 内部**。填了它，动作会在口播**说到该词的时刻**起笔（按词在本行 `speech` 中的字符位置比例映射到行时长，真源 timing.js `resolveKeywordTimeMs`，渲染端 row-player 同款镜像）；不填则动作按既定串行顺序排在板书写完之后。
+
+```json
+{
+  "triggerKeyword": "5吨",
+  "action": {
+    "tool": "rough-notation",
+    "action": "circle",
+    "target": { "region": "question", "exactText": "超标部分5吨", "occurrence": 1 },
+    "order": 2
+  }
+}
+```
+
+三条硬规则（与 Agent B 主提示词 §5.2 同口径）：
+1. **逐字存在**：必须是本行 `speech` 里逐字存在的连续原文（禁止改写、禁止拼接）；
+2. **选强调词**：选「念到这个词时正需要强调它」的词（如要圈/划的那个数字、术语本身）；
+3. **不填时长**：时间互斥铁律（夏夏拍板「每个 row 内不允许一个时间两个地方在动」）由程序钳制保证——关键词时点早于板书写完/上一动作结束时自动顺延，绝不允许输出 `durationMs` / `startMs` 等任何时长字段。
+
+关键词不在 speech 原文中时，编译层视为 miss：动作退回默认串行排期（不报错、不丢动作）。board 域仍**零 keyword**（`keyword` / `keywords` / `cue` / `triggerAtWords` 等同步字段禁用，见 board-lecture-player contract-upstream §1.2 v2.2）；`triggerKeyword` 是 actionSpec entry 级唯一受控例外。
+
+---
+
+## 七、反模式与失败模式
+
+| 反模式 | 现象 | 修正 |
+|---|---|---|
+| 自造工具 | `tool: 'box'` | 白名单只有 3 个动作，返回缺口给 Check Agent；注：`action: 'circle'`（rough-notation 内）是合法动作，勿混淆 |
+| 改下划线颜色 | `options.colorId: 'blue'` | 颜色锁定，抛 `颜色固定为 red` |
+| 填 durationMs | `action.durationMs: 2000` | 抛 `Agent 不得覆盖` |
+| 把 triggerKeyword 写进 action 内部 | `{ action: { triggerKeyword: '5吨', ... } }` | entry 级字段错位到 action 内会被忽略，动作退回串行——必须写在 action 平级（§6.4） |
+| triggerKeyword 改写原文 | speech 说「超标部分」，却填「超标的那部分」 | 编译层 miss 退回串行——必须逐字存在于本行 speech |
+| 抬笔间隔过短 | `gapAfterMs: 300` | 抛 `抬笔间隔不得小于 1000ms` |
+| 跨区画线 | region=analysis 但 end 落在 solution 区 | region 校验 + bounds clamp |
+| 坐标越界 | `start: [150, 50]` | 抛 `必须是 0—100 的百分比坐标` |
+| 未取消残留 | 用户切题后老动作继续写画布 | `cancelAll()` 立即 `generation += 1` |
+| 并发动作 | 同时 underline + draw-line | teacher-hand-exclusive 互斥，队列串行 |
+
+---
+
+## 八、快速参考
+
+```
+互斥: teacher-hand-exclusive, 任意时刻只一笔
+工具白名单: rough-notation(underline/circle) / rough-line（Task 43 动作 1.0 夏夏拍板三动作；highlight/rough-arrow/draw 已砍）
+触发词: entry 级 triggerKeyword（与 action 平级）, 逐字存在于本行 speech, 说到该词时刻起笔, miss 退串行, 互斥钳制由程序保证（真源 timing.js resolveKeywordTimeMs）
+颜色锁定: 动作 1.0 颜色统一红 #dc2626（underline / circle 同红；yellow #f8e58c 荧光黄、ink 墨黑已废弃）
+笔宽: normal=2 / emphasis=3
+坐标: 百分比 0—100, 原点左上
+抬笔间隔: MIN_HAND_LIFT_GAP_MS = 1000ms (硬下限; 2026-10-13 勘误: 曾误标 600ms)
+时长: 程序分档自动算——画圈 1000 / 下划线按字数 ≤5字 1000 / >5字 1500 / >10字 2000 / 横线 1000 ms（Task 43 动作 1.0，真源 timing.js）, Agent 不得填
+箭头: 已砍（Task 43 动作 1.0：rough-arrow 退出白名单）
+取消: cancelAll() → generation += 1, 在途任务抛 "已取消"
+时间线: 单 Row 内口播+板书+动作取最大, 跨 Row 加 ROW_GAP_MS=1000ms
+```

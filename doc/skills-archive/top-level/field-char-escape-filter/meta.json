@@ -1,0 +1,53 @@
+{
+  "name": "field-char-escape-filter",
+  "version": "2.0.0",
+  "archetype": "workflow",
+  "description": "板书字段字符转义与规范化技巧蒸馏（车同轨·书同文超级过滤器 v9 板书教义版）。模型输出损伤修复、HTML 实体解码、板书安全白名单、Unicode 缺字凑法降级（-> 约 度 角 根号）、LaTeX → 板书安全凑法、全角归半角、除号 ÷/\\div 归一 .-.（点-横-点堆叠，绝不转分数）、分数 a/b 纯字符程序升上下堆叠、² ³ 渲染层 1/3 字号代画、⑩' 符号贴排剥空格、三路渲染分派（画布 tokenizeLine / DOM renderBoardTextHtml / 纯文本 boardTextToPlain）保证跨环境不错乱。",
+  "created": "2026-09-19",
+  "updated": "2026-10-25",
+  "sources": [
+    "src/utils/superFilter.js (v9 唯一真源, 2026-10-25 板书教义版: 除号归一 .-. / FRAC_SCALE=1 / ⑩' 贴排)",
+    "row-player.html 三胞胎 root/public/dist (MD5 锁 + §5c 镜像段, 哨兵 scripts/test-superFilter.mjs; lite-player 2026-10-13 退役)",
+    "src/utils/board-doctrine.js (SYM 版式常数真源: FRAC_SCALE=1 / DIV_DOT_* / DASH_CLOSE_*)",
+    "字体实测: fontTools 解析本地 TTF cmap + ZeoSeven CDN unicode-range (5/5 可选字体)"
+  ],
+  "distillation_contract": "Distill [板书字段字符转义与规范化] as a [workflow] pack so it can help with [渲染层安全输出 / Check Agent 白名单校验 / 板书落板前统一清洗 / 跨环境纯文本兜底], using [src/utils/superFilter.js v9 + row-player.html tokenizeLine + renderBoardTextHtml + boardTextToPlain], while respecting [输出落在板书安全白名单内 / 白名单外凑法降级绝不回退印刷体 / &amp; 最后解 / $ 绝不字面落板 / 除号 ÷/\\div 归一 .-. 不转分数 / 分数 a/b 程序升堆叠 / ² ³ 渲染层 1/3 字号代画不取字形 / 算式内运算符两侧零空格 / 输出 DOM 前 esc].",
+  "core_sections": [
+    "为什么需要 superFilter (两类损伤 + 字库实测 5/5 缺字清单 + V1.0 冲突裁决)",
+    "12 步流水线 (normalizeBoardLine 含 ⑩' 符号贴排, 顺序不能倒)",
+    "五张关键表 (UNICODE2SAFE / LATEX2SAFE / FW_KEEP / BOARD_SAFE_RE+findUnsafeChars / STRUCT_MATH)",
+    "LaTeX 转义损伤修复 (repairCommonLatexEscapeDamage 三种损伤)",
+    "渲染层内部堆叠 DSL 与视觉字数 (visualLen + tokenizeLine + readBrace + ²³ 1/3 字号代画 + hasStackGlyph 2 行高度)",
+    "除号归一 .-. 硬规范 (不转分数; ⑩ 三护不误伤)",
+    "渲染分派三路 (画布 FRAC_SCALE=1 全尺寸堆叠+真字符横杆 / DOM inline style / 纯文本降级) —— 跨环境不错乱",
+    "toBoardLines (数组/字符串/对象统一入口)",
+    "与现有 skill 的协同"
+  ],
+  "key_rules": [
+    "12 步流水线顺序不能倒: \\r\\n统一 → \\n还原 → 控制字符退化 → 实体解码 → LaTeX损伤修复 → 标签剥除 → 环境剥壳 → 全角归半角 → Unicode缺字凑法+÷归一.-. → LaTeX凑法+\\div归一.-. → ²³ → 纯整数a/b→\\frac内部DSL → ⑩'符号贴排剥空格 → 压空白 → 压换行",
+    "输出必须落在板书安全白名单 BOARD_SAFE_RE 内, 白名单外一律凑法降级, 绝不静默回退印刷体混排",
+    "字库实测 5/5 全缺: → ⇒ ≤ ≥ ≠ ≈ × ÷ − ± · √ ° ∠ ⊥ ∥ π ∞ ∵ ∴ ℃ 及全部全角字母数字变体",
+    "凑法原则: 数学符号用 ASCII 键盘符凑 (-> => <= // .-.), 语义符号用中文凑 (约度角根号因为因此)",
+    "² ³ 保留输出, 渲染层代画不取字形: 画布 1/3 字号上标 / DOM .3333em sup span / 纯文本 ^2 ^3",
+    "除号 ÷/\\div 归一 .-.（点-横-点堆叠占 2 行高度, 口播念除以）——除号是除号, 分数是分数, 不互转（2026-10-24 夏夏教义）; ⑩ 三护不误伤 183.6/9 与 a/b",
+    "分数写 a/b 纯字符（程序升上下堆叠占 2 行高度, FRAC_SCALE=1 全尺寸）; \\frac 只是 superFilter 渲染层内部堆叠 DSL, 板书作者面零 LaTeX",
+    "⑩' 符号贴排: 算式内运算符两侧零空格（12.-.3=4）, 运算符类 [+-*x=<>!%./()], 迭代剥到收敛, 竖式行首/缩进豁免",
+    "分数字号 FRAC_SCALE=1（分子分母=板书字号本体, 旧 0.667/0.6/.82em 废止）; 横杆两档: 分子≤3字符'-'、>3字符'——'; 下划线 _ 与双减号 -- 凑杆严禁",
+    "HTML 实体 &amp; 必须最后解; decodeHtmlEntities 只解码到标准 Unicode, 凑法与 ÷ 归一统一交给 ⑦",
+    "剥标签用白名单标签 (b/i/u/em/...), 防误吃 3 < x 不等式文本",
+    "跨环境不错乱 = 作者面 a/b + 渲染层内部 \\frac DSL + 三路分派: 画布 tokenizeLine 真排版(FRAC_SCALE=1+真字符横杆) / DOM renderBoardTextHtml 全 inline style 零外部 CSS / 纯文本 boardTextToPlain",
+    "findUnsafeChars(text) 空数组 = 手写安全; 非空 = 告警清单 (不静默丢)",
+    "V1.0 旧规约已废止: ²³ 组件/HTML span+CSS 体系均废弃; ÷ 处置 v9 再裁为归一 .-. 不转分数 (冲突裁决见 SKILL.md §1.4/§六)",
+    "唯一真源 src/utils/superFilter.js, 三胞胎 row-player(root/public/dist) MD5 锁 + §5c 镜像段, 哨兵 node scripts/test-superFilter.mjs (121 用例)"
+  ],
+  "confidence": "high",
+  "boundaries": [
+    "本 skill 只覆盖字段字符转义与规范化, 不覆盖布局坐标 (见 board-zone-layout)",
+    "不覆盖字体加载 (见 handwriting-font-policy)",
+    "不覆盖动作控制 (见 hand-action-control)",
+    "不覆盖语速节奏 (见 speech-board-timing)",
+    "esc 只用于 DOM 字幕, canvas 板书不需要 HTML 转义",
+    "STRUCT_MATH 命中后当前降级为原样写+告警, 公式图能力暂无 KaTeX",
+    "字体覆盖结论基于 2026-10-12 实测 (fontTools + CDN unicode-range), 新增字体需重测 GLYPH 清单"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "speech-board-timing",
+  "version": "1.3.0",
+  "archetype": "workflow",
+  "description": "口播语速与板书书写时间节奏技巧蒸馏。160 cpm 语速，中文标点停顿，板书 220ms/字抖动（1秒4~5字，2026-10-15 提速），Row 间 1000ms，口播发音硬规范；Task 43 关键词触发排期（actionSpec entry 级 triggerKeyword，逐字存在于本行 speech，互斥钳制）。",
+  "created": "2026-09-19",
+  "updated": "2026-10-16",
+  "sources": [
+    "src/agent-b-v2/timing.js",
+    "src/agent-b-v2/timing.js (ponytail 唯一真源；services/speechTiming.js 幽灵路径已勘误)"
+  ],
+  "distillation_contract": "Distill [口播语速与板书书写时间节奏] as a [workflow] pack so it can help with [Agent B 写口播+板书节奏 / 渲染层估算总时长 / Check Agent 校验口播发音合规], using [src/agent-b-v2/timing.js], while respecting [B 不输出时间字段 / 时间由下游动态算 / 口播发音硬规范].",
+  "core_sections": [
+    "口播语速（160 cpm + 标点停顿）",
+    "板书书写节奏（220ms/字 + 抖动，1秒4~5字）",
+    "单动作时长估算",
+    "Row 组时间线（1D 单手串行 + Task 43 关键词触发分支）",
+    "口播发音硬规范（分数/符号/小数）",
+    "与 handoff JSON 的对接"
+  ],
+  "key_rules": [
+    "语速 160 cpm = 375ms/字 (60000/160)",
+    "字数计算去掉空白和中英文标点",
+    "中文标点停顿: 。700ms / ，500ms / ……1000ms",
+    "口播时长 = max(1500, 字数*375 + 标点停顿), 空口播=1500ms",
+    "板书书写 220ms/字, 抖动 190—250ms (周期7步), 下限 190ms (1秒4~5字, 2026-10-15 夏夏拍板提速)",
+    "板书起手延迟 = round(max(0, row.board.startDelay||0)*1000)（Task 52 startDelay 字面语义: 0/缺省=语音一起笔即写, 无自动兜底; 旧 min(2000,max(1000,speechDurationMs*0.2)) 比例兜底已废, 真源 timing.js）",
+    "动作间隔 MIN_HAND_LIFT_GAP_MS = 1000ms (真源 boardToolTiming.js; 2026-10-13 勘误: 曾标 600ms)",
+    "Row 间停顿 1000ms (AGENT_B_V2_ROW_GAP_MS, 2026-10-15 夏夏拍板 1500→1000)",
+    "Row 总耗时 = max(speechDurationMs, handWorkEndMs)",
+    "★ Task 43 关键词触发: actionSpec entry 级 triggerKeyword（逐字存在于本行 speech）→ 动作起点 = kwTimeMs（speechDurationMs × 字符位置比例, 真源 timing.js resolveKeywordTimeMs）, 再经互斥钳制 max(kwTimeMs, 前序结束); miss 退默认串行; Agent 只选词不填时长",
+    "单动作估算: 画圈固定 1000 / 下划线按字数 ≤5字 1000 / >5字 1500 / >10字 2000 / 横线固定 1000 ms (Task 43 夏夏拍板分档, timing.js 真源)",
+    "B 不输出 duration/startAt/endAt/durationMs/estimatedDurationMs",
+    "口播分数: 分母分之分子, 阿拉伯数字, 不得用斜杠",
+    "口播未知数: 艾克斯, 不得保留 x/X/×",
+    "口播乘号: 乘以, 加号: 加",
+    "口播小数: 逐位汉字 (3点一四), 不得保留小数点/合并数位",
+    "口播不得包含 KaTeX 命令或 $ 定界符"
+  ],
+  "confidence": "high",
+  "boundaries": [
+    "本 skill 只覆盖语速/标点/书写节奏/发音规范, 不覆盖动作工具白名单 (见 hand-action-control)",
+    "不覆盖布局坐标 (见 board-zone-layout)",
+    "不覆盖字体加载 (见 handwriting-font-policy)",
+    "真实时长待 TTS 跑完回填, B 输出 timingStatus=estimated"
+  ]
+}
