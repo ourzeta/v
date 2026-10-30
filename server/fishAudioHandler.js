@@ -1,0 +1,430 @@
+import { createHash } from 'crypto'
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { formatMathSpeechToChinese } from '../src/lib/mathAsrConverter.js'
+
+const __dirname = resolve(process.cwd(), "server")
+const projectRoot = resolve(__dirname, '..')
+const AUDIO_CACHE_DIR = resolve(projectRoot, 'public', 'audio-cache')
+const AUDIO_DIR = resolve(projectRoot, 'public', 'audio')
+const PIC_DIR = resolve(projectRoot, 'public', 'pic')
+
+// ★ 2026-10-26 夏夏新裁定（覆盖 Task 71 旧裁定「源码不再内置密钥」）：本项目免费公开给所有用户用，
+//   夏夏原话「我就是给人免费用的，我不在乎 key」——key 直接内置代码、随代码走，免费用户开箱即用，
+//   永不因 .env 丢失而坏（2026-10-26 实锤事故：.env 被清到只剩 DATABASE_URL，语音全链瘫）。
+//   env（FISH_AUDIO_API_KEYS / FISH_AUDIO_API_KEY）仅作运行时覆盖：设了则整池替代内置池（Task 18 口径不变）。
+//   key 池轮换：parseKeyList 分隔符宽容（半角,与全角，都认），单/复数 env 名都过同一分割器。
+const DEFAULT_API_KEYS = [
+  'sk-fish-VOLZnOgz8vqrjUJOyJy5Yrj_O1tRyCjW4zYTwjGlcXM',
+  'sk-fish-5-R0Y_BCg8RXVY_iaokb0BAWLY1jc9p90F9zaox9FWk',
+  'sk-fish-MYToCn_B0xhQT-9H4tV_YXR9aTwWg_-CjHWkXli4iec',
+]
+const DEFAULT_MODEL = 's2.1-pro-free'
+const DEFAULT_REFERENCE_ID = 'fcee4dd834844f28a92b246e0d996104'
+const DEFAULT_BASE_URL = 'https://api.fish.audio'
+
+// ★ Task 18 env 统一化：model / reference_id / base_url 三常量改从环境变量读取，
+// 未设置时回退内置预设（= 原硬编码值）。惰性函数求值，避免模块顶 import 时序问题。
+export function getFishModel() {
+  return String(process.env.FISH_AUDIO_MODEL || '').trim() || DEFAULT_MODEL
+}
+
+export function getFishReferenceId() {
+  return String(process.env.FISH_AUDIO_REFERENCE_ID || '').trim() || DEFAULT_REFERENCE_ID
+}
+
+export function getFishBaseUrl() {
+  return String(process.env.FISH_AUDIO_API_BASE_URL || '').trim().replace(/\/+$/, '') || DEFAULT_BASE_URL
+}
+
+let currentKeyIndex = 0
+
+function maskKey(key) {
+  if (!key || typeof key !== 'string') return ''
+  if (key.length <= 16) return key.slice(0, 6) + '***'
+  return `${key.slice(0, 11)}...${key.slice(-6)}`
+}
+
+// ★ Task 20: 分隔符宽容——半角","与全角"，"都认（用户从中文聊天工具粘贴配置是高频场景）
+function parseKeyList(raw) {
+  return String(raw || '').split(/[,，]/).map((s) => s.trim()).filter(Boolean)
+}
+
+export function getApiKeys() {
+  // 单数与复数都过同一分割器；单数容错多 key（粘贴串里带逗号也能正确切开）
+  const pluralKeys = parseKeyList(process.env.FISH_AUDIO_API_KEYS)
+  const singularKeys = parseKeyList(process.env.FISH_AUDIO_API_KEY)
+  const envKeys = [...singularKeys.filter((k) => !pluralKeys.includes(k)), ...pluralKeys]
+  // ★ Task 18: env 设了任一 key（单数或复数）即完全替代内置 key 池，不再混入默认池
+  if (envKeys.length > 0) return envKeys
+  return DEFAULT_API_KEYS
+}
+
+function ensureDir(dir) {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true })
+  }
+}
+
+function ensureAudioCacheDir() {
+  ensureDir(AUDIO_CACHE_DIR)
+}
+
+function pad(n, width = 2) {
+  return String(n).padStart(width, '0')
+}
+
+function genTimestampAudioName(stepIndex) {
+  const d = new Date()
+  const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}-${pad(d.getMilliseconds(), 3)}`
+  const stepPart = stepIndex !== undefined && stepIndex !== null ? `-step${Number(stepIndex) + 1}` : ''
+  return `audio-${ts}${stepPart}.mp3`
+}
+
+function getAudioHash(text, referenceId, model) {
+  return createHash('md5')
+    .update(`${text || ''}::${referenceId || ''}::${model || ''}`)
+    .digest('hex')
+}
+
+function sendJson(res, statusCode, data) {
+  res.statusCode = statusCode
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  res.end(JSON.stringify(data))
+}
+
+function readJsonBody(req) {
+  return new Promise((resolvePromise, reject) => {
+    let raw = ''
+    req.on('data', (chunk) => {
+      raw += chunk
+    })
+    req.on('end', () => {
+      if (!raw) {
+        resolvePromise({})
+        return
+      }
+      try {
+        resolvePromise(JSON.parse(raw))
+      } catch (err) {
+        reject(new Error('Invalid JSON: ' + err.message))
+      }
+    })
+    req.on('error', reject)
+  })
+}
+
+/**
+ * 调用 Fish Audio API 进行语音合成（支持多Key自动轮换与故障转移）
+ */
+export async function synthesizeSpeech({
+  text,
+  referenceId = getFishReferenceId(),
+  model = getFishModel(),
+  apiKey,
+  forceRefresh = false,
+}) {
+  if (!text || typeof text !== 'string') {
+    throw new Error('缺少有效文本 text')
+  }
+
+  ensureAudioCacheDir()
+  // ★ 71 夏夏裁决「反斜杠不行不行念」：TTS 咽喉统一过数学口播转换（\frac{a}{b}→b分之a、÷ 与板书除号记号 .-.→除以、
+  //   ²→的平方、算式 x→乘以/艾克斯），单条/批量两 API 全覆盖（跳过 Check 的脏 speech 也被兜住）。
+  //   转换幂等；audio-cache hash 键随转换口径换血——旧含 DSL 字面的脏缓存永不命中、自然作废重合成。
+  //   ★ 2026-10-24 教义补：.-. 除号堆叠记号同走本咽喉（mathAsrConverter 除号转换已含 .-.）。
+  const cleanText = formatMathSpeechToChinese(text).trim()
+  const hash = getAudioHash(cleanText, referenceId, model)
+  const filename = `${hash}.mp3`
+  const filePath = resolve(AUDIO_CACHE_DIR, filename)
+  const audioUrl = `/audio-cache/${filename}`
+
+  // 若已缓存且文件有效，且未强制重新生成，直接返回
+  if (!forceRefresh && existsSync(filePath)) {
+    try {
+      const stat = readFileSync(filePath)
+      if (stat && stat.length > 500) {
+        return {
+          ok: true,
+          audioUrl,
+          cached: true,
+          hash,
+          model,
+          referenceId,
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // 获取可用 key 列表并自动轮换
+  const allKeys = getApiKeys()
+  const candidateKeys = apiKey ? [apiKey] : allKeys
+  if (candidateKeys.length === 0) {
+    throw new Error('未配置语音合成 API key：请在 .env 或环境变量设置 FISH_AUDIO_API_KEYS（71 起 source 不再内置密钥）')
+  }
+
+  let lastError = null
+  const startIndex = apiKey ? 0 : (currentKeyIndex++) % candidateKeys.length
+
+  for (let attempt = 0; attempt < candidateKeys.length; attempt++) {
+    const activeKey = candidateKeys[(startIndex + attempt) % candidateKeys.length]
+    try {
+      const response = await fetch(`${getFishBaseUrl()}/v1/tts`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${activeKey}`,
+          'Content-Type': 'application/json',
+          'model': model,
+        },
+        body: JSON.stringify({
+          text: cleanText,
+          reference_id: referenceId,
+          format: 'mp3',
+        }),
+      })
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => '')
+        throw new Error(`HTTP ${response.status}: ${errText || response.statusText}`)
+      }
+
+      const arrayBuffer = await response.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+      writeFileSync(filePath, buffer)
+
+      // ★ 2026-10-26 夏夏裁定「重新生成的新的语音链接要刷新回填」：同文本 md5 同名覆盖写文件，
+      //   URL 字符串若不变，前端 setRowAudioUrl 回填的 src 与旧值一字不差 → 浏览器 audio 元素
+      //   不重载、直接用内存旧音频（重新生成名存实亡）。forceRefresh 路径返带时间戳版本参数的
+      //   URL 破缓存：前端/时长探测/交付档全部拿到真“新链接”。（读盘消费点已同步剥 query，
+      //   见 saveSpeechLocally / deliverableAssetPaths.toRelative）
+      const returnedAudioUrl = forceRefresh ? `${audioUrl}?v=${Date.now()}` : audioUrl
+
+      return {
+        ok: true,
+        audioUrl: returnedAudioUrl,
+        cached: false,
+        hash,
+        model,
+        referenceId,
+        usedKey: maskKey(activeKey),
+      }
+    } catch (err) {
+      lastError = err
+      console.warn(`[FishAudio] Key (${maskKey(activeKey)}) 请求异常，准备轮换下一个 Key:`, err.message)
+      // 继续循环尝试下一个 key
+    }
+  }
+
+  throw lastError || new Error('所有可用 Fish Audio Key 均调用失败')
+}
+
+/**
+ * 保存本地音频文件（规范化时间戳命名，并配套存入 public/audio/ 与 public/pic/）
+ */
+export async function saveSpeechLocally({
+  text,
+  referenceId = getFishReferenceId(),
+  model = getFishModel(),
+  apiKey,
+  stepIndex,
+  forceRefresh = false,
+  audioUrl,
+}) {
+  if (!text || typeof text !== 'string') {
+    throw new Error('缺少有效口播文本 text')
+  }
+
+  ensureDir(AUDIO_DIR)
+  ensureDir(PIC_DIR)
+
+  let buffer = null
+  // 若已给出 audioUrl 且未强制刷新，先检查本地文件
+  if (audioUrl && !forceRefresh) {
+    // ★ 剥 query（?v= 时间戳版本参数是破浏览器缓存用的，磁盘路径不能带）
+    const cleanRelPath = String(audioUrl).split('?')[0].replace(/^\//, '')
+    const localCandidate = resolve(projectRoot, 'public', cleanRelPath)
+    if (existsSync(localCandidate)) {
+      try {
+        const stat = readFileSync(localCandidate)
+        if (stat && stat.length > 500) {
+          buffer = stat
+        }
+      } catch (_err) {
+        // ignore
+      }
+    }
+  }
+
+  // 若无可用 buffer，实时调用合成
+  if (!buffer) {
+    const synthResult = await synthesizeSpeech({
+      text,
+      referenceId,
+      model,
+      apiKey,
+      forceRefresh,
+    })
+    const cacheFile = resolve(projectRoot, 'public', synthResult.audioUrl.split('?')[0].replace(/^\//, ''))
+    if (existsSync(cacheFile)) {
+      buffer = readFileSync(cacheFile)
+    }
+  }
+
+  if (!buffer || buffer.length < 500) {
+    throw new Error('未能生成或读取有效的音频文件')
+  }
+
+  const filename = genTimestampAudioName(stepIndex)
+  const audioFilePath = resolve(AUDIO_DIR, filename)
+  const picFilePath = resolve(PIC_DIR, filename)
+
+  writeFileSync(audioFilePath, buffer)
+  try {
+    writeFileSync(picFilePath, buffer) // 与截图同目录配套存放一份
+  } catch (_err) {
+    // ignore
+  }
+
+  return {
+    ok: true,
+    filename,
+    urlPath: `/audio/${filename}`,
+    audioUrl: `/audio/${filename}`,
+    companionPicUrl: `/pic/${filename}`,
+    size: buffer.length,
+  }
+}
+
+/**
+ * 轻量并发调度器 (限制并发数为 1~2)
+ */
+async function mapConcurrent(items, limit, workerFn) {
+  if (!items.length) return []
+  const results = new Array(items.length)
+  let nextIndex = 0
+  const concurrency = Math.min(Math.max(1, limit), items.length)
+  const workers = new Array(concurrency).fill(0).map(async () => {
+    while (nextIndex < items.length) {
+      const idx = nextIndex++
+      try {
+        results[idx] = await workerFn(items[idx], idx)
+      } catch (err) {
+        results[idx] = { ok: false, error: err.message || String(err) }
+      }
+    }
+  })
+  await Promise.all(workers)
+  return results
+}
+
+/**
+ * 处理 TTS 相关 HTTP 接口
+ */
+export async function handleFishAudioRequest(req, res) {
+  const url = new URL(req.url, 'http://127.0.0.1')
+  const path = url.pathname.replace(/^\/api\/tts/, '')
+
+  // GET /api/tts/info — 获取当前语音配置信息及轮换池状态
+  if (req.method === 'GET' && (path === '/info' || path === '')) {
+    const keys = getApiKeys()
+    sendJson(res, 200, {
+      ok: true,
+      provider: 'fish-audio',
+      model: getFishModel(),
+      referenceId: getFishReferenceId(),
+      keyCount: keys.length,
+      keys: keys.map(maskKey),
+      docs: 'https://docs.fish.audio/developer-guide/getting-started/quickstart',
+    })
+    return true
+  }
+
+  // POST /api/tts/synthesize — 单条文本语音合成（自动轮换 Key）
+  if (req.method === 'POST' && path === '/synthesize') {
+    try {
+      const body = await readJsonBody(req)
+      const { text, referenceId, model, apiKey, forceRefresh } = body
+      const result = await synthesizeSpeech({ text, referenceId, model, apiKey, forceRefresh })
+      sendJson(res, 200, result)
+      return true
+    } catch (error) {
+      sendJson(res, 500, {
+        ok: false,
+        error: error.message || String(error),
+      })
+      return true
+    }
+  }
+
+  // POST /api/tts/save-local — 保存本地并返回下载 URL（配套存入 public/audio/ 与 public/pic/）
+  if (req.method === 'POST' && path === '/save-local') {
+    try {
+      const body = await readJsonBody(req)
+      const result = await saveSpeechLocally(body)
+      sendJson(res, 200, result)
+      return true
+    } catch (error) {
+      sendJson(res, 500, {
+        ok: false,
+        error: error.message || String(error),
+      })
+      return true
+    }
+  }
+
+  // POST /api/tts/batch — 批量文本语音合成（一次并发 1-2 个，自动轮换 Key）
+  if (req.method === 'POST' && path === '/batch') {
+    try {
+      const body = await readJsonBody(req)
+      const items = Array.isArray(body.items) ? body.items : []
+      const referenceId = body.referenceId || getFishReferenceId()
+      const model = body.model || getFishModel()
+      const concurrency = Math.min(2, Math.max(1, Number(body.concurrency) || 2))
+
+      const results = await mapConcurrent(items, concurrency, async (item, index) => {
+        const text = typeof item === 'string' ? item : item.text || item.speech
+        const id = item.id !== undefined ? item.id : index + 1
+        if (!text) {
+          return { id, text: '', ok: false, error: '空文本' }
+        }
+        try {
+          const resItem = await synthesizeSpeech({ text, referenceId, model })
+          return { id, text, ok: true, ...resItem }
+        } catch (e) {
+          return { id, text, ok: false, error: e.message || String(e) }
+        }
+      })
+
+      sendJson(res, 200, {
+        ok: true,
+        concurrency,
+        items: results,
+      })
+      return true
+    } catch (error) {
+      sendJson(res, 500, { ok: false, error: error.message || String(error) })
+      return true
+    }
+  }
+
+  return false
+}
+
+export function fishAudioPlugin() {
+  return {
+    name: 'fish-audio-proxy',
+    configureServer(server) {
+      ensureAudioCacheDir()
+      server.middlewares.use('/api/tts', (req, res, next) => {
+        Promise.resolve(handleFishAudioRequest(req, res))
+          .then((handled) => {
+            if (!handled) next()
+          })
+          .catch(next)
+      })
+    },
+  }
+}
